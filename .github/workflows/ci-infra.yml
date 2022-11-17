@@ -1,0 +1,66 @@
+name: CI Infra Checks
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - infra/**
+      - .github/workflows/ci-infra.yml
+  pull_request:
+    paths:
+      - infra/**
+      - .github/workflows/ci-infra.yml
+
+jobs:
+  check-terraform-format:
+    name: Check Terraform format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.1
+          terraform_wrapper: false
+      - name: Run infra-lint
+        run: |
+          echo "If this fails, run 'make infra-format'"
+          make infra-lint
+  validate-terraform:
+    name: Validate Terraform modules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.1
+          terraform_wrapper: false
+      - name: Run infra-validate
+        run: make infra-validate
+  check-compliance-with-checkov:
+    name: Check compliance with checkov
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Run Checkov check
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: infra
+          framework: terraform
+  check-compliance-with-tfsec:
+    name: Check compliance with tfsec
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tfsec check
+        uses: aquasecurity/tfsec-pr-commenter-action@v1.2.0
+        with:
+          github_token: ${{ github.token }}
