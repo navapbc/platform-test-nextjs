@@ -21,7 +21,7 @@
   "dependencies": {
     "@trussworks/react-uswds": "^4.0.0",
     "@uswds/uswds": "^3.1.0",
-    "i18next": "^22.0.0",
+    "i18next": "^22.4.9",
     "next": "^13.0.6",
     "next-i18next": "^12.1.0",
     "react": "^18.2.0",
