@@ -6,5 +6,3 @@ release-build:
 		--platform=linux/amd64 \
 		$(OPTS) \
 		.
-
-#
