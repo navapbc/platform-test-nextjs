@@ -10,9 +10,11 @@ COPY package.json /srv
 WORKDIR /srv
 # Copy all the remaining application files (ignoring files in .dockerignore) to the working directory.
 COPY . /srv
+
 # Install application dependencies.
-RUN npm ci
-# Build the application.
-RUN npm run build
+RUN npm ci \
+  # Build the application.
+  && npm run build
+
 # Run the application.
 CMD npm run start
