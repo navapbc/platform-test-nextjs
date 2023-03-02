@@ -17,4 +17,4 @@ RUN npm ci \
   && npm run build
 
 # Run the application.
-CMD npm run start
+CMD ["npm", "run", "start"]
