@@ -22,11 +22,11 @@ USER ${RUN_USER}
 
 
 # Copy just the package data to the working directory.
-COPY package-lock.json /srv
-COPY package.json /srv
-WORKDIR /srv
+COPY package-lock.json /app
+COPY package.json /app
+WORKDIR /app
 # Copy all the remaining application files (ignoring files in .dockerignore) to the working directory.
-COPY . /srv
+COPY . /app
 # Install application dependencies.
 RUN npm ci
 # Build the application.
