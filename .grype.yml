@@ -33,3 +33,17 @@ ignore:
   # High severity
   # Ignoring since this is only used in storybook which is a dev tool
   - vulnerability: GHSA-w5p7-h5w8-2hfq
+
+  #####################
+  ## False positives ##
+  #####################
+
+  # http-cache-semantics vulnerable to Regular Expression Denial of Service
+  # https://github.com/advisories/GHSA-rc47-6667-2j5j
+  # http-cache-semantics does not exist as a dependency in this app
+  - vulnerability: GHSA-rc47-6667-2j5j
+
+  # Uncontrolled Resource Consumption in trim-newlines
+  # https://github.com/advisories/GHSA-7p7h-4mm5-852v
+  # trim-newlines does not exist as a dependency in this app
+  - vulnerability: GHSA-7p7h-4mm5-852v
