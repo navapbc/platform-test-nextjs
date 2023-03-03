@@ -16,17 +16,13 @@ RUN : "${RUN_USER:?RUN_USER and RUN_UID need to be set and non-empty.}" && \
   [ "${RUN_USER}" = "root" ] || \
   (addgroup -S "${RUN_USER}" && adduser -S -G "${RUN_USER}" -h "/home/${RUN_USER}" -u ${RUN_UID} "${RUN_USER}" \
   && mkdir /app \
-  && chown -R ${RUN_UID} "/home/${RUN_USER}" /app)
+  && chown -R "${RUN_USER}:${RUN_USER}" "/home/${RUN_USER}" /app)
 
 USER ${RUN_USER}
-
-
-# Copy just the package data to the working directory.
-COPY package-lock.json /app
-COPY package.json /app
 WORKDIR /app
-# Copy all the remaining application files (ignoring files in .dockerignore) to the working directory.
-COPY . /app
+
+# Copy all the application files (ignoring files in .dockerignore) to the working directory.
+COPY --chown="${RUN_USER}:${RUN_USER}" . /app
 # Install application dependencies.
 RUN npm ci
 # Build the application.
