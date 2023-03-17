@@ -55,7 +55,7 @@
     "jest-axe": "^7.0.0",
     "jest-cli": "^29.1.2",
     "jest-environment-jsdom": "^29.1.2",
-    "postcss": "^8.4.17",
+    "postcss": "^8.4.21",
     "postcss-loader": "^7.0.1",
     "postcss-preset-env": "^8.0.0",
     "prettier": "^2.8.4",
