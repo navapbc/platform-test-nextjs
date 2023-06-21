@@ -1,5 +1,5 @@
-# PROJECT_NAME defaults to name of the current directory.
-PROJECT_NAME ?= $(notdir $(PWD))
+# PROJECT_NAME must match project name in project-config/main.tf
+PROJECT_NAME ?= platform-nextjs
 
 # For now only support a single app in the folder `app/` within the repo
 # In the future, support multiple apps, and which app is being operated
