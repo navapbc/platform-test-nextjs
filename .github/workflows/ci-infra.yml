@@ -5,10 +5,12 @@ on:
     branches:
       - main
     paths:
+      - app/Dockerfile
       - infra/**
       - .github/workflows/ci-infra.yml
   pull_request:
     paths:
+      - app/Dockerfile
       - infra/**
       - test/**
       - .github/workflows/ci-infra.yml
