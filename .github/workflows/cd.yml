@@ -1,18 +1,21 @@
 name: Deploy
+# Need to set a default value for when the workflow is triggered from a git push,
+# which bypasses the default configuration for inputs and cannot use env.ENVIRONMENT
+# since env context is not accessible in this context
+run-name: Deploy ${{ github.ref_name }} to ${{ inputs.environment || 'dev' }}
 
 on:
   push:
     branches:
-      - 'main'
+      - "main"
     paths:
-      - 'app/**'
-      - 'bin/**'
-      - 'infra/**'
-      - .github/workflows/cd.yml
+      - "app/**"
+      - "bin/**"
+      - "infra/**"
   workflow_dispatch:
     inputs:
       environment:
-        description: "environment input"
+        description: "target environment"
         required: true
         default: "dev"
         type: choice
@@ -22,11 +25,12 @@ on:
           - prod
 
 env:
+  APP_NAME: app
   # Need to set a default value for when the workflow is triggered from a git push,
   # which bypasses the default configuration for inputs
   ENVIRONMENT: ${{ inputs.environment || 'dev' }}
 
-# Need to repeat the expression since env.ENV_NAME is not accessible in this context
+# Need to repeat the expression since env.ENVIRONMENT is not accessible in this context
 concurrency: cd-${{ inputs.environment || 'dev' }}
 
 jobs:
@@ -46,10 +50,12 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v3
+
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: ./.github/actions/configure-aws-credentials
         with:
-          role-to-assume: arn:aws:iam::327446564135:role/platform-nextjs-github-actions
-          aws-region: us-east-1
+          app_name: ${{ env.APP_NAME }}
+          environment: ${{ env.ENVIRONMENT }}
+
       - name: Deploy release
-        run: make release-deploy ENVIRONMENT="$ENVIRONMENT"
+        run: make release-deploy APP_NAME=$APP_NAME ENVIRONMENT="$ENVIRONMENT"

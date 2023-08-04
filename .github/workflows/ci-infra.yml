@@ -56,6 +56,7 @@ jobs:
         with:
           directory: infra
           framework: terraform
+          quiet: true # only displays failed checks
   check-compliance-with-tfsec:
     name: Check compliance with tfsec
     runs-on: ubuntu-latest
@@ -73,24 +74,29 @@ jobs:
   infra-test-e2e:
     name: End-to-end tests
     runs-on: ubuntu-latest
-  
+
     permissions:
       contents: read
       id-token: write
-  
+
     steps:
       - uses: actions/checkout@v3
+
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.2.1
           terraform_wrapper: false
+
       - uses: actions/setup-go@v3
         with:
           go-version: ">=1.19.0"
+
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: ./.github/actions/configure-aws-credentials
         with:
-          role-to-assume: arn:aws:iam::327446564135:role/platform-nextjs-github-actions
-          aws-region: us-east-1
+          app_name: app
+          # Run infra CI on dev environment
+          environment: dev
+
       - name: Run Terratest
         run: make infra-test
