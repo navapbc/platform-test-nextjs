@@ -15,16 +15,13 @@ locals {
   #   <ACCOUNT_NAME>.<ACCOUNT_ID>.s3.tfbackend
   #
   # Projects/applications that use the same AWS account for all environments
-  # will refer to the same account for all environments. For example, if the
-  # project has a single account named "myaccount", then infra/accounts will
-  # have one tfbackend file myaccount.XXXXX.s3.tfbackend, and the 
-  # account_names_by_environment map will look like:
+  # will refer to the same account for all environments:
   #
   #   account_names_by_environment = {
-  #     shared  = "myaccount"
-  #     dev     = "myaccount"
-  #     staging = "myaccount"
-  #     prod    = "myaccount"
+  #     shared  = "shared"
+  #     dev     = "shared"
+  #     staging = "shared"
+  #     prod    = "shared"
   #   }
   #
   # Projects/applications that have separate AWS accounts for each environment

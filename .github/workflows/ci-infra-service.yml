@@ -1,19 +1,18 @@
 name: CI Infra Service Checks
 
 on:
-  # !! Uncomment to trigger automated infra tests once dev environment is set up
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - infra/*/service/**
-  #     - test/**
-  #     - .github/workflows/ci-infra-service.yml
-  # pull_request:
-  #   paths:
-  #     - infra/*/service/**
-  #     - test/**
-  #     - .github/workflows/ci-infra-service.yml
+  push:
+    branches:
+      - main
+    paths:
+      - infra/*/service/**
+      - test/**
+      - .github/workflows/ci-infra-service.yml
+  pull_request:
+    paths:
+      - infra/*/service/**
+      - test/**
+      - .github/workflows/ci-infra-service.yml
   workflow_dispatch:
 
 jobs:
