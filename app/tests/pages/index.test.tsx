@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/react";
 import { axe } from "jest-axe";
 import Index from "src/pages/index";
+import { render, screen } from "tests/react-utils";
+
+jest.mock("src/services/feature-flags/setup");
 
 describe("Index", () => {
   // Demonstration of rendering translated text, and asserting the presence of a dynamic value.

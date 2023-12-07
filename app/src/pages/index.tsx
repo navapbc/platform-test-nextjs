@@ -3,10 +3,10 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { FeatureFlagManager } from "src/services/FeatureFlagManager";
+import { getLocaleMessages } from "src/i18n";
+import { isFeatureEnabled } from "src/services/feature-flags";
 
-import { Trans, useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslations } from "next-intl";
 import Head from "next/head";
 
 interface PageProps {
@@ -16,7 +16,7 @@ interface PageProps {
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
   props: PageProps
 ) => {
-  const { t } = useTranslation("home");
+  const t = useTranslations("home");
 
   return (
     <>
@@ -28,38 +28,29 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 
       {/* Demonstration of more complex translated strings, with safe-listed links HTML elements */}
       <p className="usa-intro">
-        <Trans
-          t={t}
-          i18nKey="intro"
-          components={{
-            LinkToNextJs: <a href="https://nextjs.org/docs" />,
-          }}
-        />
+        {t.rich("intro", {
+          LinkToNextJs: (content) => (
+            <a href="https://nextjs.org/docs">{content}</a>
+          ),
+        })}
       </p>
       <div className="measure-6">
-        <Trans
-          t={t}
-          i18nKey="body"
-          components={{
-            ul: <ul className="usa-list" />,
-            li: <li />,
-          }}
-        />
+        {t.rich("body", {
+          ul: (content) => <ul className="usa-list">{content}</ul>,
+          li: (content) => <li>{content}</li>,
+        })}
+
         <p>
           {/* Demonstration of formatters */}
-          <Trans
-            t={t}
-            ns="home"
-            i18nKey="formatting"
-            values={{
-              date: "2021-01-01",
-              amount: 1234,
-            }}
-          />
+          {t("formatting", {
+            amount: 1234,
+            isoDate: new Date("2023-11-29T23:30:00.000Z"),
+          })}
         </p>
+
         {/* Demonstration of feature flagging */}
         <p>{t("featureflagging")}</p>
-        {props.isFooEnabled && <p>^..^</p>}
+        {props.isFooEnabled ? <p>^..^{t("flagon")}</p> : <p>{t("flagoff")}</p>}
       </div>
     </>
   );
@@ -69,12 +60,14 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = (
 export const getServerSideProps: GetServerSideProps<PageProps> = async ({
   locale,
 }) => {
-  const translations = await serverSideTranslations(locale ?? "en-US");
+  const isFooEnabled = await isFeatureEnabled("foo", "anonymous");
 
-  const featureFlags = new FeatureFlagManager("anonymous");
-  const isFooEnabled = await featureFlags.isFeatureEnabled("foo");
-
-  return { props: { ...translations, isFooEnabled } };
+  return Promise.resolve({
+    props: {
+      messages: getLocaleMessages(locale),
+      isFooEnabled,
+    },
+  });
 };
 
 export default Home;
