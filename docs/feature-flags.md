@@ -1,31 +1,24 @@
-# Feature flags and partial releases
+# Feature flagging
 
-Feature flags are an important tool that enables [trunk-based development](https://trunkbaseddevelopment.com/). They allow in-progress features to be merged into the main branch while still allowing that branch to be deployed to production at any time, thus decoupling application deploys from feature releases. For a deeper introduction, [Martin Fowler's article on Feature Toggles](https://martinfowler.com/articles/feature-toggles.html) and [LaunchDarkly's blog post on feature flags](https://launchdarkly.com/blog/what-are-feature-flags/) are both great articles that explain the what and why of feature flags.
+- [AWS Evidently](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently.html) is used for feature flagging
+- For more information about the decision-making behind using Evidently, [this infra ADR is available](https://github.com/navapbc/template-infra/blob/68b2db42d06198cb070b0603e63a930db346309f/docs/decisions/infra/0010-feature-flags-system-design.md)
+- Additional documentation of the feature flagging solution is available in [infra docs](https://github.com/navapbc/template-infra/blob/main/docs/feature-flags.md)
 
 ## How it works
 
-This project leverages [Amazon CloudWatch Evidently](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently.html) to create and manage feature flags.
+1. `services/feature-flags/FeatureFlagManager` provides a service layer to interact with AWS Evidently endpoints. For example, class method `isFeatureEnabled` calls out to Evidently to retrieve a feature flag value we can then return to the client
+1. Pages can call `isFeatureEnabled` from Next.js server side code and return the feature flag value to components as props.
 
-## Creating feature flags
+## Local development
 
-The list of feature flags for an application is defined in the `feature_flags` property in its app-config module (in `/infra/[app_name]/app-config/main.tf`). To create a new feature flag, add a new string to that list. To remove a feature flag, remove the feature flag from the list. The set of feature flags will be updated on the next terraform apply of the service layer, or during the next deploy of the application.
+Out-of-the-box, local calls where `FEATURE_FLAGS_PROJECT` environment variable is unset will fall back to use `LocalFeatureFlagManager` which defaults flag values to `false`. 
 
-## Querying feature flags in the application
+If you want to test Evidently locally, use your AWS IAM credentials. Once you set `FEATURE_FLAGS_PROJECT` and the AWS environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_REGION`) in `app/.env.local`, calls to Evidently will succeed. 
 
-To determine whether a particular feature should be enabled or disabled for a given user, the application code calls an "is feature enabled" function in the feature flags module. Under the hood, the module will call AWS Evidently's [EvaluateFeature](https://docs.aws.amazon.com/cloudwatchevidently/latest/APIReference/API_EvaluateFeature.html) API to determine whether a feature is enabled or disabled. For partial rollouts, it will remember which variation of the application a particular user saw and keep the user experience consistent for that user. For more information about the feature flags module, look in the application code and docs.
+## Creating a new feature flag
 
-## Managing feature releases and partial rollouts via AWS Console
+To create a new feature flag, update `/infra/[app_name]/app-config/main.tf`. More information available in infra repository [docs](https://github.com/navapbc/template-infra/blob/main/docs/feature-flags.md).
 
-The system is designed to allow the managing of feature releases and partial rollouts outside of terraform, which empowers business owners and product managers to control enable and disable feature flags and adjust feature launch traffic percentages without needing to depend on the development team.
+## Toggling feature flags
 
-### To enable or disable a feature
-
-1. Navigate to the Evidently service in AWS Console, select the appropriate Evidently feature flags project for the relevant application environment, and select the feature you want to manage.
-2. In the actions menu, select "Edit feature".
-3. Under "Feature variations", select either "FeatureOn" (to enable a feature) or "FeatureOff" (to disable a feature) to be the "Default" variation, then submit. **Warning: Do not modify the variation values. "FeatureOn" should always have a value of "True" and "FeatureOff" should always have a value of "False".**
-
-### To manage a partial rollout
-
-1. Navigate to the Evidently service in AWS Console, and select the appropriate Evidently feature flags project for the relevant application environment
-2. Select "Create launch" to create a new partial rollout plan, or select an existing launch to manage an existing rollout
-3. Under "Launch configuration", choose the traffic percentage you want to send to each variation, and choose whether you want the launch to begin immediately or on a schedule.
+Toggle feature flags via the AWS Console GUI. More information [here](https://github.com/navapbc/template-infra/blob/main/docs/feature-flags.md#managing-feature-releases-and-partial-rollouts-via-aws-console).
