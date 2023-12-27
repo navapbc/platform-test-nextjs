@@ -19,7 +19,7 @@ locals {
   # make calls to the internet.
   has_external_non_aws_service = false
 
-  has_incident_management_service = false
+  has_incident_management_service = true
 
   feature_flags = ["foo", "bar"]
 
