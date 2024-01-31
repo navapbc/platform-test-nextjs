@@ -2,8 +2,11 @@ name: Deploy Storybook
 
 on:
   # Runs on pushes targeting the default branch
+  # !! Uncomment the lines below to enable this workflow
   push:
     branches: ["main"]
+    paths:
+      - app/**
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,7 +31,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: 20
           cache-dependency-path: ./app/package-lock.json # or yarn.lock
           cache: npm # or yarn
       - name: Setup Pages
@@ -38,7 +41,7 @@ jobs:
         run: npm ci
         working-directory: ./app
       - name: Build
-        run: BASE_PATH=${{ steps.pages_config.outputs.base_path }} npm run storybook-build
+        run: NEXT_PUBLIC_BASE_PATH=${{ steps.pages_config.outputs.base_path }} npm run storybook-build
         working-directory: ./app
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
