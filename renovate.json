@@ -1,15 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", "group:allNonMajor", "schedule:monthly"],
+  "extends": [
+    "config:base",
+    "group:allNonMajor",
+    "schedule:monthly",
+    "docker:enableMajor"
+  ],
   "timezone": "America/Los_Angeles",
-  "enabledManagers": ["npm"],
+  "enabledManagers": ["dockerfile", "npm"],
   "rangeStrategy": "update-lockfile",
   "ignoreUnstable": true,
   "labels": ["dependencies"],
   "packageRules": [
     {
-      "description": "Group React packages together",
-      "packageNames": [
+      "description": ["Group React packages together"],
+      "matchPackagePatterns": [
         "react",
         "@types/react",
         "react-dom",
@@ -18,24 +23,37 @@
       "groupName": "React"
     },
     {
-      "description": "Group Storybook packages together",
+      "description": ["Group Storybook packages together"],
       "matchPackagePatterns": ["storybook"],
       "groupName": "Storybook"
     },
     {
-      "description": "Group I18next packages together",
-      "matchPackagePatterns": ["i18next"],
-      "groupName": "I18next"
+      "description": ["Group test packages together"],
+      "matchPackagePatterns": ["jest", "testing-library"],
+      "groupName": "Jest"
     },
     {
-      "description": "USWDS must match what react-uswds depends on",
-      "matchPackagePatterns": ["@uswds/uswds"],
-      "groupName": "USWDS core"
+      "description": ["Group CSS-related packages together"],
+      "matchPackagePatterns": ["postcss", "sass"],
+      "groupName": "Styling"
     },
     {
-      "description": "Leave peer dependencies alone",
-      "depTypeList": ["peerDependencies"],
-      "enabled": false
+      "description": ["Group USWDS packages together"],
+      "matchPackagePatterns": ["uswds"],
+      "groupName": "USWDS"
+    },
+    {
+      "description": [
+        "Prettier v3 breaks the VS Code Prettier extension, last time it was tested"
+      ],
+      "enabled": false,
+      "matchPackagePatterns": ["^prettier"],
+      "groupName": "Prettier"
+    },
+    {
+      "description": ["Leave peer dependencies alone"],
+      "enabled": false,
+      "matchDepTypes": ["peerDependencies"]
     }
   ],
   "ignoreDeps": [],
