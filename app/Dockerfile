@@ -98,6 +98,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV PORT 3000
+ENV HOSTNAME 0.0.0.0
 
 EXPOSE 3000
 
