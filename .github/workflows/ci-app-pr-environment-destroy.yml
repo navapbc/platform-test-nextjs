@@ -1,6 +1,10 @@
 name: CI App PR Environment Destroy
 on:
   workflow_dispatch:
+    inputs:
+      pr_number:
+        required: true
+        type: string
   pull_request:
     types: [closed]
 jobs:
@@ -10,3 +14,4 @@ jobs:
     with:
       app_name: "app"
       environment: "dev"
+      pr_number: ${{ inputs.pr_number || github.event.number }}

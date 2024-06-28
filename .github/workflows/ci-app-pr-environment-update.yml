@@ -1,6 +1,13 @@
 name: CI App PR Environment Update
 on:
   workflow_dispatch:
+    inputs:
+      pr_number:
+        required: true
+        type: string
+      commit_hash:
+        required: true
+        type: string
   pull_request:
 jobs:
   update:
@@ -9,3 +16,5 @@ jobs:
     with:
       app_name: "app"
       environment: "dev"
+      pr_number: ${{ inputs.pr_number || github.event.number }}
+      commit_hash: ${{ inputs.commit_hash || github.event.pull_request.head.sha }}
