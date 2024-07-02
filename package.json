@@ -1,0 +1,12 @@
+{
+  "name": "platform-test-nextjs",
+  "description": "This project is used to test the integration of [template-infra](https://github.com/navapbc/template-infra) and [template-application-nextjs](https://github.com/navapbc/template-application-nextjs).",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pa11y-ci": "^3.1.0"
+  }
+}
