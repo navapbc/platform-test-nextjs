@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - app/**
-      - .github/workflows/ci-a11y.yml
+      - .github/workflows/accessibility-tests.yml
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
 
     env:
       NODE_VERSION: 20
-      LOCKFILE_PATH: ./app/package-lock.json
+      LOCKFILE_PATH: ./package-lock.json
       PACKAGE_MANAGER: npm
 
     steps:
@@ -36,17 +36,6 @@ jobs:
       - name: Create screenshots directory
         run: mkdir -p screenshots-output
 
-      - name: Build project
-        run: npm run build
-
-      - name: Start server and log output
-        run: npm run start &
-
-      - name: Wait for frontend to be ready
-        run: |
-          # Ensure the server wait script is executable
-          chmod +x ./bin/wait-for-frontend.sh
-          ./bin/wait-for-frontend.sh
       - name: Run pa11y-ci
         run: |
           set -e # Ensure the script fails if any command fails
