@@ -39,16 +39,17 @@ jobs:
         run: mkdir -p screenshots-output
 
       - name: Set service endpoint URL
-        run: echo "SERVICE_ENDPOINT_URL=${{ inputs.service_endpoint_url }}" >> $GITHUB_ENV
+        run: echo "SERVICE_ENDPOINT_URL=\"${{ inputs.service_endpoint_url }}\"" >> $GITHUB_ENV
+        shell: bash
 
       - name: Update pa11y-ci config for desktop
         run: |
-          jq ".defaults.actions += [\"navigate to \"${SERVICE_ENDPOINT_URL}\"]" .pa11yci-desktop.json > .pa11yci-desktop-temp.json
+          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" .pa11yci-desktop.json > .pa11yci-desktop-temp.json
           mv .pa11yci-desktop-temp.json .pa11yci-desktop.json
 
       - name: Update pa11y-ci config for mobile
         run: |
-          jq ".defaults.actions += [\"navigate to \"${SERVICE_ENDPOINT_URL}\"]" .pa11yci-mobile.json > .pa11yci-mobile-temp.json
+          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" .pa11yci-mobile.json > .pa11yci-mobile-temp.json
           mv .pa11yci-mobile-temp.json .pa11yci-mobile.json
 
       - name: Run pa11y-ci
