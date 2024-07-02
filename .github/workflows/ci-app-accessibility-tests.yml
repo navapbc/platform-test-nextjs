@@ -1,10 +1,11 @@
 name: CI App Accessibility Tests
 
 on:
-  pull_request:
-    paths:
-      - app/**
-      - .github/workflows/accessibility-tests.yml
+  workflow_call:
+    inputs:
+      service_endpoint_url:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -36,24 +37,8 @@ jobs:
       - name: Create screenshots directory
         run: mkdir -p screenshots-output
 
-      - name: Fetch PR environment details
-        id: pr-env
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const pr = await github.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-            });
-            const body = pr.data.body;
-            const serviceEndpoint = body.match(/Service Endpoint: (\S+)/)[1];
-            return serviceEndpoint;
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Set service endpoint URL
-        run: echo "SERVICE_ENDPOINT_URL=${{ steps.pr-env.outputs.result }}" >> $GITHUB_ENV
+        run: echo "SERVICE_ENDPOINT_URL=${{ inputs.service_endpoint_url }}" >> $GITHUB_ENV
 
       - name: Update pa11y-ci config for desktop
         run: |

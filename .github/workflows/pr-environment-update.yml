@@ -1,5 +1,6 @@
+# .github/workflows/pr-environment-update.yml
 name: PR Environment Update
-run-name: Update PR Environment ${{ inputs.pr_number }}
+
 on:
   workflow_call:
     inputs:
@@ -15,6 +16,7 @@ on:
       commit_hash:
         required: true
         type: string
+
 jobs:
   build-and-publish:
     name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
@@ -51,6 +53,22 @@ jobs:
           environment: ${{ inputs.environment }}
 
       - name: Update environment
+        id: update-environment
         run: ./bin/update-pr-environment "${{ inputs.app_name }}" "${{ inputs.environment }}" "${{ inputs.pr_number }}" "${{ inputs.commit_hash }}"
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: Extract service endpoint URL
+        id: extract-url
+        run: echo "::set-output name=service_endpoint::$(cat service_endpoint.txt)"
+
+  trigger-accessibility-tests:
+    name: Trigger Accessibility Tests
+    needs: update
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Accessibility Tests Workflow
+        uses: ./.github/workflows/ci-accessibility-test.yml
+        with:
+          service_endpoint_url: ${{ needs.update.outputs.service_endpoint }}
