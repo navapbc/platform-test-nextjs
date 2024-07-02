@@ -16,7 +16,7 @@ jobs:
 
     env:
       NODE_VERSION: 20
-      LOCKFILE_PATH: ./package-lock.json
+      LOCKFILE_PATH: ./app/package-lock.json
       PACKAGE_MANAGER: npm
 
     steps:
@@ -36,12 +36,42 @@ jobs:
       - name: Create screenshots directory
         run: mkdir -p screenshots-output
 
+      - name: Fetch PR environment details
+        id: pr-env
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const body = pr.data.body;
+            const serviceEndpoint = body.match(/Service Endpoint: (\S+)/)[1];
+            return serviceEndpoint;
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set service endpoint URL
+        run: echo "SERVICE_ENDPOINT_URL=${{ steps.pr-env.outputs.result }}" >> $GITHUB_ENV
+
+      - name: Update pa11y-ci config for desktop
+        run: |
+          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" .pa11yci-desktop.json > .pa11yci-desktop-temp.json
+          mv .pa11yci-desktop-temp.json .pa11yci-desktop.json
+
+      - name: Update pa11y-ci config for mobile
+        run: |
+          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" .pa11yci-mobile.json > .pa11yci-mobile-temp.json
+          mv .pa11yci-mobile-temp.json .pa11yci-mobile.json
+
       - name: Run pa11y-ci
         run: |
           set -e # Ensure the script fails if any command fails
           npm run test:pa11y-desktop
           npm run test:pa11y-mobile
           echo "pa11y-ci tests finished."
+
       - name: Upload screenshots to artifacts
         if: always()
         uses: actions/upload-artifact@v3
