@@ -1,3 +1,4 @@
+# .github/workflows/pr-environment-update.yml
 name: PR Environment Update
 
 on:
@@ -18,7 +19,7 @@ on:
 
 jobs:
   build-and-publish:
-    name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
+    name: " "
     uses: ./.github/workflows/build-and-publish.yml
     with:
       app_name: ${{ inputs.app_name }}
@@ -55,7 +56,7 @@ jobs:
         id: update-environment
         run: ./bin/update-pr-environment "${{ inputs.app_name }}" "${{ inputs.environment }}" "${{ inputs.pr_number }}" "${{ inputs.commit_hash }}"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Save service endpoint to file
         run: echo "${{ steps.update-environment.outputs.service_endpoint }}" > service_endpoint.txt
@@ -67,13 +68,54 @@ jobs:
     outputs:
       service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
 
-  trigger-accessibility-tests:
-    name: Trigger Accessibility Tests
+  accessibility:
+    name: Accessibility Checks
     needs: update
     runs-on: ubuntu-latest
 
     steps:
-      - name: Call Accessibility Tests Workflow
-        uses: ./.github/workflows/ci-accessibility-test.yml
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          service_endpoint_url: ${{ needs.update.outputs.service_endpoint }}
+          node-version: '20'
+          cache-dependency-path: ./app/package-lock.json
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./app
+
+      - name: Create screenshots directory
+        run: mkdir -p ./app/screenshots-output
+
+      - name: Set service endpoint URL
+        run: echo "SERVICE_ENDPOINT_URL=${{ needs.update.outputs.service_endpoint }}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Update pa11y-ci config for desktop
+        run: |
+          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
+          mv ./app/.pa11yci-desktop-temp.json ./app/.pa11yci-desktop.json
+
+      - name: Update pa11y-ci config for mobile
+        run: |
+          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
+          mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
+
+      - name: Run pa11y-ci
+        run: |
+          set -e # Ensure the script fails if any command fails
+          npm run test:pa11y-desktop
+          npm run test:pa11y-mobile
+          echo "pa11y-ci tests finished."
+        working-directory: ./app
+
+      - name: Upload screenshots to artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: ./app/screenshots-output
