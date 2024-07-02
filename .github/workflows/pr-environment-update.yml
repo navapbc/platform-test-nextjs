@@ -58,9 +58,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - name: Save service endpoint to file
+        run: echo "${{ steps.update-environment.outputs.service_endpoint }}" > service_endpoint.txt
+
       - name: Set output
         id: set-output
         run: echo "service_endpoint=$(cat service_endpoint.txt)" >> $GITHUB_OUTPUT
+    outputs:
+      service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
 
   trigger-accessibility-tests:
     name: Trigger Accessibility Tests
