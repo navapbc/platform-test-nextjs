@@ -58,9 +58,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Extract service endpoint URL
-        id: extract-url
-        run: echo "::set-output name=service_endpoint::$(cat service_endpoint.txt)"
+      - name: Set output
+        id: set-output
+        run: echo "service_endpoint=$(cat service_endpoint.txt)" >> $GITHUB_OUTPUT
 
   trigger-accessibility-tests:
     name: Trigger Accessibility Tests

@@ -1,3 +1,4 @@
+# .github/workflows/ci-accessibility-test.yml
 name: CI App Accessibility Tests
 
 on:
@@ -42,12 +43,12 @@ jobs:
 
       - name: Update pa11y-ci config for desktop
         run: |
-          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" .pa11yci-desktop.json > .pa11yci-desktop-temp.json
+          jq ".defaults.actions += [\"navigate to \"${SERVICE_ENDPOINT_URL}\"]" .pa11yci-desktop.json > .pa11yci-desktop-temp.json
           mv .pa11yci-desktop-temp.json .pa11yci-desktop.json
 
       - name: Update pa11y-ci config for mobile
         run: |
-          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" .pa11yci-mobile.json > .pa11yci-mobile-temp.json
+          jq ".defaults.actions += [\"navigate to \"${SERVICE_ENDPOINT_URL}\"]" .pa11yci-mobile.json > .pa11yci-mobile-temp.json
           mv .pa11yci-mobile-temp.json .pa11yci-mobile.json
 
       - name: Run pa11y-ci
