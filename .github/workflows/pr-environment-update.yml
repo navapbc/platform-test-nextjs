@@ -1,4 +1,3 @@
-# .github/workflows/pr-environment-update.yml
 name: PR Environment Update
 
 on:
@@ -63,7 +62,8 @@ jobs:
 
       - name: Set output
         id: set-output
-        run: echo "service_endpoint=$(cat service_endpoint.txt)" >> $GITHUB_OUTPUT
+        run: echo "service_endpoint=$(cat service_endpoint.txt)" >> "$GITHUB_OUTPUT"
+        shell: bash
     outputs:
       service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
 

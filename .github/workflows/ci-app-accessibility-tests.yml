@@ -1,4 +1,3 @@
-# .github/workflows/ci-accessibility-test.yml
 name: CI App Accessibility Tests
 
 on:
@@ -39,7 +38,7 @@ jobs:
         run: mkdir -p screenshots-output
 
       - name: Set service endpoint URL
-        run: echo "SERVICE_ENDPOINT_URL=\"${{ inputs.service_endpoint_url }}\"" >> $GITHUB_ENV
+        run: echo "SERVICE_ENDPOINT_URL=\"${{ inputs.service_endpoint_url }}\"" >> "$GITHUB_ENV"
         shell: bash
 
       - name: Update pa11y-ci config for desktop
