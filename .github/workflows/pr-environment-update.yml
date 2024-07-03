@@ -100,6 +100,9 @@ jobs:
         run: echo "SERVICE_ENDPOINT_URL=\"${{ needs.update.outputs.service_endpoint }}\"" >> "$GITHUB_ENV"
         shell: bash
 
+      - name: Debug service endpoint
+        run: echo "SERVICE_ENDPOINT_URL is set to $SERVICE_ENDPOINT_URL"
+
       - name: Update pa11y-ci config for desktop
         run: |
           jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
