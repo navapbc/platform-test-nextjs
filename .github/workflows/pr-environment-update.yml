@@ -110,6 +110,12 @@ jobs:
           jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
           mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
 
+      - name: Updated pa11y-ci desktop configs
+        run: cat ./app/.pa11yci-desktop.json
+
+      - name: Updated pa11y-ci mobile configs
+        run: cat ./app/.pa11yci-mobile.json
+
       - name: Run pa11y-ci
         run: |
           set -e # Ensure the script fails if any command fails
