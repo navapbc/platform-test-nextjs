@@ -63,12 +63,12 @@ jobs:
       - name: Debug service endpoint file content
         run: cat service_endpoint.txt
 
-      - name: Debug service endpoint output
-        run: echo "service_endpoint=$(cat service_endpoint.txt)"
-
       - name: Set output
         id: set-output
-        run: echo "service_endpoint=$(cat service_endpoint.txt)" >> "$GITHUB_OUTPUT"
+        run: |
+          ENDPOINT=$(cat service_endpoint.txt)
+          echo "service_endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
+          echo "Debug service endpoint: $ENDPOINT"
         shell: bash
     outputs:
       service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
@@ -97,7 +97,7 @@ jobs:
         run: mkdir -p ./app/screenshots-output
 
       - name: Set service endpoint URL
-        run: echo "SERVICE_ENDPOINT_URL=\"${{ needs.update.outputs.service_endpoint }}\"" >> "$GITHUB_ENV"
+        run: echo "SERVICE_ENDPOINT_URL=${{ needs.update.outputs.service_endpoint }}" >> "$GITHUB_ENV"
         shell: bash
 
       - name: Debug service endpoint
