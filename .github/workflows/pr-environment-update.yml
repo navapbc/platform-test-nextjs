@@ -103,14 +103,11 @@ jobs:
       - name: Debug service endpoint
         run: echo "SERVICE_ENDPOINT_URL is set to $SERVICE_ENDPOINT_URL"
 
-      - name: Update pa11y-ci config for desktop
+      - name: Update pa11y-ci config
         run: |
-          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
+          jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
           mv ./app/.pa11yci-desktop-temp.json ./app/.pa11yci-desktop.json
-
-      - name: Update pa11y-ci config for mobile
-        run: |
-          jq ".defaults.actions += [\"navigate to ${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
+          jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
           mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
 
       - name: Run pa11y-ci
