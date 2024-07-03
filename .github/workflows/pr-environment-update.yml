@@ -58,7 +58,7 @@ jobs:
         id: update-environment
         run: ./bin/update-pr-environment "${{ inputs.app_name }}" "${{ inputs.environment }}" "${{ inputs.pr_number }}" "${{ inputs.commit_hash }}"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
 
       - name: Capture service endpoint
         id: get-service-endpoint
