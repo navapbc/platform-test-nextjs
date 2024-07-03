@@ -36,6 +36,9 @@ jobs:
 
     concurrency: pr-environment-${{ inputs.pr_number }}
 
+    outputs:
+      service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -65,13 +68,8 @@ jobs:
 
       - name: Set output
         id: set-output
-        run: |
-          ENDPOINT=$(cat service_endpoint.txt)
-          echo "service_endpoint=$ENDPOINT" >> "$GITHUB_OUTPUT"
-          echo "Debug service endpoint: $ENDPOINT"
+        run: echo "service_endpoint=$(cat service_endpoint.txt)" >> "$GITHUB_OUTPUT"
         shell: bash
-    outputs:
-      service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
 
   accessibility:
     name: Accessibility Checks
@@ -97,7 +95,7 @@ jobs:
         run: mkdir -p ./app/screenshots-output
 
       - name: Set service endpoint URL
-        run: echo "SERVICE_ENDPOINT_URL=${{ needs.update.outputs.service_endpoint }}" >> "$GITHUB_ENV"
+        run: echo "SERVICE_ENDPOINT_URL=\"${{ needs.update.outputs.service_endpoint }}\"" >> "$GITHUB_ENV"
         shell: bash
 
       - name: Debug service endpoint
@@ -110,10 +108,10 @@ jobs:
           jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
           mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
 
-      - name: Updated pa11y-ci desktop configs
+      - name: Cat updated pa11y-ci config for desktop
         run: cat ./app/.pa11yci-desktop.json
 
-      - name: Updated pa11y-ci mobile configs
+      - name: Cat updated pa11y-ci config for mobile
         run: cat ./app/.pa11yci-mobile.json
 
       - name: Run pa11y-ci
