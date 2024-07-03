@@ -37,7 +37,7 @@ jobs:
     concurrency: pr-environment-${{ inputs.pr_number }}
 
     outputs:
-      service_endpoint: ${{ steps.set-output.outputs.service_endpoint }}
+      service_endpoint: ${{ steps.get-service-endpoint.outputs.service_endpoint }}
 
     steps:
       - uses: actions/checkout@v4
@@ -60,18 +60,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Save service endpoint to file
-        run: echo "${{ steps.update-environment.outputs.service_endpoint }}" > service_endpoint.txt
-
-      - name: Debug service endpoint file content
-        run: cat service_endpoint.txt
-
-      - name: Set output
-        id: set-output
+      - name: Capture service endpoint
+        id: get-service-endpoint
         run: |
-          service_endpoint=$(cat service_endpoint.txt)
-          echo "service_endpoint=${service_endpoint}" >> "$GITHUB_OUTPUT"
-        shell: bash
+            service_endpoint=$(terraform -chdir="infra/${{ inputs.app_name }}/service" output -raw service_endpoint)
+            echo "service_endpoint=${service_endpoint}"
+            echo "service_endpoint=${service_endpoint}" >> "$GITHUB_OUTPUT"
 
   accessibility:
     name: Accessibility Checks
