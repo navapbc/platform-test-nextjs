@@ -1,4 +1,3 @@
-# .github/workflows/pr-environment-update.yml
 name: PR Environment Update
 
 on:
@@ -92,7 +91,7 @@ jobs:
         run: mkdir -p ./app/screenshots-output
 
       - name: Set service endpoint URL
-        run: echo "SERVICE_ENDPOINT_URL=${{ needs.update.outputs.service_endpoint }}" >> $GITHUB_ENV
+        run: echo "SERVICE_ENDPOINT_URL=\"${{ needs.update.outputs.service_endpoint }}\"" >> "$GITHUB_ENV"
         shell: bash
 
       - name: Update pa11y-ci config for desktop
