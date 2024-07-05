@@ -8,8 +8,8 @@ on:
         type: string
 
 jobs:
-  setup:
-    name: Setup
+  setup-accessibility:
+    name: Setup Accessibility Tests
     runs-on: ubuntu-latest
 
     outputs:
@@ -35,17 +35,17 @@ jobs:
 
       - name: Debug service endpoint
         id: get-service-endpoint
-        run: echo "SERVICE_ENDPOINT_URL=${{ inputs.service_endpoint }}"
+        run: echo "SERVICE_ENDPOINT=${{ inputs.service_endpoint }}"
         env:
-          SERVICE_ENDPOINT_URL: ${{ inputs.service_endpoint }}
+          SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
 
   pa11y-desktop:
-    name: Run pa11y-ci Desktop
-    needs: setup
+    name: Run Desktop Accessibility
+    needs: setup-accessibility
     runs-on: ubuntu-latest
 
     env:
-      SERVICE_ENDPOINT_URL: ${{ needs.setup.outputs.service_endpoint }}
+      SERVICE_ENDPOINT: ${{ needs.setup-accessibility.outputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -53,7 +53,7 @@ jobs:
 
       - name: Update pa11y-ci config for desktop
         run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
+          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
           mv ./app/.pa11yci-desktop-temp.json ./app/.pa11yci-desktop.json
 
       - name: Cat updated pa11y-ci config for desktop
@@ -74,12 +74,12 @@ jobs:
           path: ./app/screenshots-output
 
   pa11y-mobile:
-    name: Run pa11y-ci Mobile
-    needs: setup
+    name: Run Mobile Accessibility
+    needs: setup-accessibility
     runs-on: ubuntu-latest
 
     env:
-      SERVICE_ENDPOINT_URL: ${{ needs.setup.outputs.service_endpoint }}
+      SERVICE_ENDPOINT: ${{ needs.setup-accessibility.outputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -87,7 +87,7 @@ jobs:
 
       - name: Update pa11y-ci config for mobile
         run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
+          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
           mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
 
       - name: Cat updated pa11y-ci config for mobile
