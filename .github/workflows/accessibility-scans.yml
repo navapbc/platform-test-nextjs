@@ -8,12 +8,12 @@ on:
         type: string
 
 jobs:
-  accessibility:
-    name: Accessibility Scans
+  setup:
+    name: Setup
     runs-on: ubuntu-latest
 
-    env:
-      SERVICE_ENDPOINT_URL: ${{ inputs.service_endpoint }}
+    outputs:
+      service_endpoint: ${{ steps.get-service-endpoint.outputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -34,32 +34,75 @@ jobs:
         run: mkdir -p ./app/screenshots-output
 
       - name: Debug service endpoint
-        run: echo "SERVICE_ENDPOINT_URL is set to $SERVICE_ENDPOINT_URL"
+        id: get-service-endpoint
+        run: echo "SERVICE_ENDPOINT_URL=${{ inputs.service_endpoint }}"
+        env:
+          SERVICE_ENDPOINT_URL: ${{ inputs.service_endpoint }}
 
-      - name: Update pa11y-ci config
+  pa11y-desktop:
+    name: Run pa11y-ci Desktop
+    needs: setup
+    runs-on: ubuntu-latest
+
+    env:
+      SERVICE_ENDPOINT_URL: ${{ needs.setup.outputs.service_endpoint }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update pa11y-ci config for desktop
         run: |
           jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
           mv ./app/.pa11yci-desktop-temp.json ./app/.pa11yci-desktop.json
-          jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
-          mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
 
       - name: Cat updated pa11y-ci config for desktop
         run: cat ./app/.pa11yci-desktop.json
 
-      - name: Cat updated pa11y-ci config for mobile
-        run: cat ./app/.pa11yci-mobile.json
-
-      - name: Run pa11y-ci
+      - name: Run pa11y-ci Desktop
         run: |
           set -e # Ensure the script fails if any command fails
           npm run test:pa11y-desktop
-          npm run test:pa11y-mobile
-          echo "pa11y-ci tests finished."
+          echo "pa11y-ci desktop tests finished."
         working-directory: ./app
 
       - name: Upload screenshots to artifacts
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshots
+          name: screenshots-desktop
+          path: ./app/screenshots-output
+
+  pa11y-mobile:
+    name: Run pa11y-ci Mobile
+    needs: setup
+    runs-on: ubuntu-latest
+
+    env:
+      SERVICE_ENDPOINT_URL: ${{ needs.setup.outputs.service_endpoint }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update pa11y-ci config for mobile
+        run: |
+          jq ".urls = [\"${SERVICE_ENDPOINT_URL}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
+          mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
+
+      - name: Cat updated pa11y-ci config for mobile
+        run: cat ./app/.pa11yci-mobile.json
+
+      - name: Run pa11y-ci Mobile
+        run: |
+          set -e # Ensure the script fails if any command fails
+          npm run test:pa11y-mobile
+          echo "pa11y-ci mobile tests finished."
+        working-directory: ./app
+
+      - name: Upload screenshots to artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots-mobile
           path: ./app/screenshots-output
