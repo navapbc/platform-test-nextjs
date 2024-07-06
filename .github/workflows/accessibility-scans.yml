@@ -49,7 +49,7 @@ jobs:
         working-directory: ./app
 
       - name: Create screenshots directory
-        run: mkdir -p ./app/desktop-screenshots-output
+        run: mkdir -p ./app/screenshots-output
 
       - name: Update pa11y-ci config for desktop
         run: |
@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-desktop
-          path: ./app/desktop-screenshots-output
+          path: ./app/screenshots-output
 
   pa11y-mobile:
     name: Run Mobile Accessibility
@@ -90,7 +90,7 @@ jobs:
         working-directory: ./app
 
       - name: Create screenshots directory
-        run: mkdir -p ./app/mobile-screenshots-output
+        run: mkdir -p ./app/screenshots-output
 
       - name: Update pa11y-ci config for mobile
         run: |
@@ -112,4 +112,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-mobile
-          path: ./app/mobile-screenshots-output
+          path: ./app/screenshots-output
