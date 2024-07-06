@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache-dependency-path: ./app/package-lock.json
+          cache-dependency-path: ./accessibility/package-lock.json
           cache: npm
 
   accessibility-desktop-scans:
@@ -40,32 +40,32 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./app
+        working-directory: ./accessibility
 
       - name: Create screenshots directory
-        run: mkdir -p ./app/screenshots-output
+        run: mkdir -p ./accessibility/screenshots-output
 
       - name: Update pa11y-ci config for desktop
         run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./app/.pa11yci-desktop.json > ./app/.pa11yci-desktop-temp.json
-          mv ./app/.pa11yci-desktop-temp.json ./app/.pa11yci-desktop.json
+          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-desktop.json > ./accessibility/.pa11yci-desktop-temp.json
+          mv ./accessibility/.pa11yci-desktop-temp.json ./accessibility/.pa11yci-desktop.json
 
       - name: Cat updated pa11y-ci config for desktop
-        run: cat ./app/.pa11yci-desktop.json
+        run: cat ./accessibility/.pa11yci-desktop.json
 
       - name: Run pa11y-ci Desktop
         run: |
           set -e # Ensure the script fails if any command fails
           npm run test:pa11y-desktop
           echo "pa11y-ci desktop tests finished."
-        working-directory: ./app
+        working-directory: ./accessibility
 
       - name: Upload screenshots to artifacts
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-desktop
-          path: ./app/screenshots-output
+          path: ./accessibility/screenshots-output
 
   pa11y-mobile:
     name: Run Mobile Accessibility
@@ -81,29 +81,29 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./app
+        working-directory: ./accessibility
 
       - name: Create screenshots directory
-        run: mkdir -p ./app/screenshots-output
+        run: mkdir -p ./accessibility/screenshots-output
 
       - name: Update pa11y-ci config for mobile
         run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./app/.pa11yci-mobile.json > ./app/.pa11yci-mobile-temp.json
-          mv ./app/.pa11yci-mobile-temp.json ./app/.pa11yci-mobile.json
+          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-mobile.json > ./accessibility/.pa11yci-mobile-temp.json
+          mv ./accessibility/.pa11yci-mobile-temp.json ./accessibility/.pa11yci-mobile.json
 
       - name: Cat updated pa11y-ci config for mobile
-        run: cat ./app/.pa11yci-mobile.json
+        run: cat ./accessibility/.pa11yci-mobile.json
 
       - name: Run pa11y-ci Mobile
         run: |
           set -e # Ensure the script fails if any command fails
           npm run test:pa11y-mobile
           echo "pa11y-ci mobile tests finished."
-        working-directory: ./app
+        working-directory: ./accessibility
 
       - name: Upload screenshots to artifacts
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-mobile
-          path: ./app/screenshots-output
+          path: ./accessibility/screenshots-output
