@@ -26,12 +26,6 @@ jobs:
           cache-dependency-path: ./app/package-lock.json
           cache: npm
 
-      - name: Debug service endpoint
-        id: get-service-endpoint
-        run: echo "SERVICE_ENDPOINT=${{ inputs.service_endpoint }}"
-        env:
-          SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
-
   accessibility-desktop-scans:
     name: Run Desktop Accessibility
     needs: setup-accessibility
