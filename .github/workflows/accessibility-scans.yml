@@ -9,7 +9,7 @@ on:
 
 jobs:
   accessibility-desktop-scans:
-    name: Run Desktop Accessibility
+    name: Run Desktop Accessibility Scans
     runs-on: ubuntu-latest
 
     env:
@@ -55,8 +55,8 @@ jobs:
           name: screenshots-desktop
           path: ./accessibility/screenshots-output
 
-  pa11y-mobile:
-    name: Run Mobile Accessibility
+  accessibility-mobile-scans:
+    name: Run Mobile Accessibility Scans
     runs-on: ubuntu-latest
 
     env:
