@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      service_endpoint: ${{ steps.get-service-endpoint.outputs.service_endpoint }}
+      service_endpoint: ${{ inputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -36,13 +36,13 @@ jobs:
         env:
           SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
 
-  pa11y-desktop:
+  accessibility-desktop-scans:
     name: Run Desktop Accessibility
     needs: setup-accessibility
     runs-on: ubuntu-latest
 
     env:
-      SERVICE_ENDPOINT: ${{ needs.setup-accessibility.outputs.service_endpoint }}
+      SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -74,13 +74,13 @@ jobs:
           name: screenshots-desktop
           path: ./app/screenshots-output
 
-  pa11y-mobile:
+  accessibility-mobile-scans:
     name: Run Mobile Accessibility
     needs: setup-accessibility
     runs-on: ubuntu-latest
 
     env:
-      SERVICE_ENDPOINT: ${{ needs.setup-accessibility.outputs.service_endpoint }}
+      SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
 
     steps:
       - name: Checkout source
