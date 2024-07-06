@@ -58,7 +58,7 @@ jobs:
       - name: Run pa11y-ci Desktop
         run: |
           set -e # Ensure the script fails if any command fails
-          pa11y-ci --config .pa11yci-desktop.json
+          npm run test:pa11y-desktop
           echo "pa11y-ci desktop tests finished."
         working-directory: ./app
 
@@ -95,7 +95,7 @@ jobs:
       - name: Run pa11y-ci Mobile
         run: |
           set -e # Ensure the script fails if any command fails
-          pa11y-ci --config .pa11yci-mobile.json
+          npm run test:pa11y-mobile
           echo "pa11y-ci mobile tests finished."
         working-directory: ./app
 
