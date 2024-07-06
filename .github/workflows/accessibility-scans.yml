@@ -26,10 +26,6 @@ jobs:
           cache-dependency-path: ./app/package-lock.json
           cache: npm
 
-
-      - name: Create screenshots directory
-        run: mkdir -p ./app/screenshots-output
-
       - name: Debug service endpoint
         id: get-service-endpoint
         run: echo "SERVICE_ENDPOINT=${{ inputs.service_endpoint }}"
@@ -48,9 +44,8 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./app
+      - name: Create screenshots directory
+        run: mkdir -p ./app/desktop-screenshots-output
 
       - name: Update pa11y-ci config for desktop
         run: |
@@ -63,7 +58,7 @@ jobs:
       - name: Run pa11y-ci Desktop
         run: |
           set -e # Ensure the script fails if any command fails
-          npm run test:pa11y-desktop
+          pa11y-ci --config .pa11yci-desktop.json
           echo "pa11y-ci desktop tests finished."
         working-directory: ./app
 
@@ -72,9 +67,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-desktop
-          path: ./app/screenshots-output
+          path: ./app/desktop-screenshots-output
 
-  accessibility-mobile-scans:
+  pa11y-mobile:
     name: Run Mobile Accessibility
     needs: setup-accessibility
     runs-on: ubuntu-latest
@@ -86,9 +81,8 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
-        working-directory: ./app
+      - name: Create screenshots directory
+        run: mkdir -p ./app/mobile-screenshots-output
 
       - name: Update pa11y-ci config for mobile
         run: |
@@ -101,7 +95,7 @@ jobs:
       - name: Run pa11y-ci Mobile
         run: |
           set -e # Ensure the script fails if any command fails
-          npm run test:pa11y-mobile
+          pa11y-ci --config .pa11yci-mobile.json
           echo "pa11y-ci mobile tests finished."
         working-directory: ./app
 
@@ -110,4 +104,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: screenshots-mobile
-          path: ./app/screenshots-output
+          path: ./app/mobile-screenshots-output
