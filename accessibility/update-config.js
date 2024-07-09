@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the configuration file
-const configPath = process.argv[2]; // Pass the config path as the first argument
+const configPath = path.resolve(__dirname, process.argv[2]);
 
 // Load the configuration file
 const config = require(configPath);
