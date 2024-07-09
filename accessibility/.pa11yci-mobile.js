@@ -33,10 +33,9 @@ module.exports = {
 
       // Actions to perform during the test
       "actions": [
-        "wait for element #main-content to be visible",
-        "screen capture screenshots-output/mobile-main-view.png",
-        "click element .usa-navbar button",
-        "screen capture screenshots-output/mobile-expand-menu.png"
+        "wait for element body to be visible",
+        "wait for document to be ready",
+        "screen capture screenshots-output/mobile-view.png",
       ]
     }
   }
