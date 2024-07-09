@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
+      BASE_URL: ${{ inputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -35,12 +35,6 @@ jobs:
 
       - name: Create screenshots directory
         run: mkdir -p ./accessibility/screenshots-output
-
-      - name: Update pa11y-ci config for desktop
-        run: node ./accessibility/update-config.js .pa11yci-desktop.js ${{ inputs.service_endpoint }}
-
-      - name: Cat updated pa11y-ci config for desktop
-        run: cat ./accessibility/.pa11yci-desktop.js
 
       - name: Run pa11y-ci Desktop
         run: |
@@ -61,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SERVICE_ENDPOINT: ${{ inputs.service_endpoint }}
+      BASE_URL: ${{ inputs.service_endpoint }}
 
     steps:
       - name: Checkout source
@@ -81,15 +75,9 @@ jobs:
       - name: Create screenshots directory
         run: mkdir -p ./accessibility/screenshots-output
 
-      - name: Update pa11y-ci config for mobile
-        run: node ./accessibility/update-config.js .pa11yci-mobile.js ${{ inputs.service_endpoint }}
-
-      - name: Cat updated pa11y-ci config for mobile
-        run: cat ./accessibility/.pa11yci-mobile.js
-
       - name: Run pa11y-ci Mobile
         run: |
-          set -e # Ensure the script fails if any command fails
+          set -e
           npm run test:pa11y-mobile
           echo "pa11y-ci mobile tests finished."
         working-directory: ./accessibility

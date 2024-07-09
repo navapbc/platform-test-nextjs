@@ -30,5 +30,6 @@ module.exports = {
         "wait for element body to be visible",
         "screen capture screenshots-output/desktop-view.png"
       ]
-    }
+    },
+    "urls": [process.env.BASE_URL || "http://localhost:3000"]
   };
