@@ -1,6 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Update the URLs in the pa11y-ci configuration file.
+ *
+ * This script takes two parameters:
+ * 1. The path to the pa11y-ci configuration file (relative to the script).
+ * 2. The new service endpoint URL to be added to the configuration.
+ *
+ * Example usage:
+ * node update-config.js ./path/to/config.js http://example.com
+ */
+
 // Path to the configuration file
 const configPath = path.resolve(__dirname, process.argv[2]);
 
