@@ -34,9 +34,7 @@ jobs:
         run: mkdir -p ./accessibility/screenshots-output
 
       - name: Update pa11y-ci config for desktop
-        run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-desktop.js > ./accessibility/.pa11yci-desktop-temp.js
-          mv ./accessibility/.pa11yci-desktop-temp.js ./accessibility/.pa11yci-desktop.js
+        run: node ./accessibility/update-config.js ./accessibility/.pa11yci-desktop.js ${{ inputs.service_endpoint }}
 
       - name: Cat updated pa11y-ci config for desktop
         run: cat ./accessibility/.pa11yci-desktop.js
@@ -81,9 +79,7 @@ jobs:
         run: mkdir -p ./accessibility/screenshots-output
 
       - name: Update pa11y-ci config for mobile
-        run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-mobile.js > ./accessibility/.pa11yci-mobile-temp.js
-          mv ./accessibility/.pa11yci-mobile-temp.js ./accessibility/.pa11yci-mobile.js
+        run: node ./accessibility/update-config.js ./accessibility/.pa11yci-mobile.js ${{ inputs.service_endpoint }}
 
       - name: Cat updated pa11y-ci config for mobile
         run: cat ./accessibility/.pa11yci-mobile.js
