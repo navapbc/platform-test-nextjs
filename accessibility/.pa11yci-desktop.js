@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 module.exports = {
     "defaults": {
       // The maximum time allowed for the entire test run, in milliseconds
@@ -31,5 +33,5 @@ module.exports = {
         "screen capture screenshots-output/desktop-view.png"
       ]
     },
-    "urls": [process.env.BASE_URL || "http://localhost:3000"]
+    "urls": [process.env.BASE_URL]
   };

@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 module.exports = {
     "defaults": {
       // The maximum time allowed for the entire test run, in milliseconds
