@@ -34,7 +34,6 @@ module.exports = {
       // Actions to perform during the test
       "actions": [
         "wait for element body to be visible",
-        "wait for document to be ready",
         "screen capture screenshots-output/mobile-view.png",
       ]
     }
