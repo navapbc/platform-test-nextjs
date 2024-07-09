@@ -6,6 +6,9 @@ on:
       service_endpoint:
         required: true
         type: string
+      app_name:
+        required: false
+        type: string
 
 jobs:
   accessibility-desktop-scans:
