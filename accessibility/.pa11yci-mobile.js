@@ -1,4 +1,4 @@
-{
+module.exports = {
   "defaults": {
     "timeout": 240000,
     "runners": ["axe"],
@@ -8,9 +8,16 @@
       "ignoreHTTPSErrors": true,
       "args": ["--disable-dev-shm-usage", "--no-sandbox"]
     },
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "mobile": true
+    },
     "actions": [
       "wait for element #main-content to be visible",
-      "screen capture screenshots-output/desktop-main-view.png"
+      "screen capture screenshots-output/mobile-main-view.png",
+      "click element .usa-navbar button",
+      "screen capture screenshots-output/mobile-expand-menu.png"
     ]
   }
-}
+};

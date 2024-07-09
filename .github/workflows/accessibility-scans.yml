@@ -35,11 +35,11 @@ jobs:
 
       - name: Update pa11y-ci config for desktop
         run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-desktop.json > ./accessibility/.pa11yci-desktop-temp.json
-          mv ./accessibility/.pa11yci-desktop-temp.json ./accessibility/.pa11yci-desktop.json
+          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-desktop.js > ./accessibility/.pa11yci-desktop-temp.js
+          mv ./accessibility/.pa11yci-desktop-temp.js ./accessibility/.pa11yci-desktop.js
 
       - name: Cat updated pa11y-ci config for desktop
-        run: cat ./accessibility/.pa11yci-desktop.json
+        run: cat ./accessibility/.pa11yci-desktop.js
 
       - name: Run pa11y-ci Desktop
         run: |
@@ -82,11 +82,11 @@ jobs:
 
       - name: Update pa11y-ci config for mobile
         run: |
-          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-mobile.json > ./accessibility/.pa11yci-mobile-temp.json
-          mv ./accessibility/.pa11yci-mobile-temp.json ./accessibility/.pa11yci-mobile.json
+          jq ".urls = [\"${SERVICE_ENDPOINT}\"]" ./accessibility/.pa11yci-mobile.js > ./accessibility/.pa11yci-mobile-temp.js
+          mv ./accessibility/.pa11yci-mobile-temp.js ./accessibility/.pa11yci-mobile.js
 
       - name: Cat updated pa11y-ci config for mobile
-        run: cat ./accessibility/.pa11yci-mobile.json
+        run: cat ./accessibility/.pa11yci-mobile.js
 
       - name: Run pa11y-ci Mobile
         run: |
