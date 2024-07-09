@@ -39,4 +39,5 @@ module.exports = {
         "screen capture screenshots-output/mobile-expand-menu.png"
       ]
     }
-  };
+  }
+}
