@@ -13,6 +13,9 @@ const baseConfig = {
     // The maximum time allowed for the entire test run, in milliseconds
     "timeout": 240000,
 
+    // WCAG 2.0 AA standard
+    "standard": "WCAG2AA",
+
     // The accessibility testing runners to use; "axe" is a common choice
     "runners": ["axe"],
 
