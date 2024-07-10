@@ -16,7 +16,7 @@ A `screenshots-output` directory will be created if it doesn't already exist. Th
 
 ### PR Environments
 
-The accessibility checks are triggered in PR preview environments on each PR update. For more information on how PR environments work, please refer to [PR Environments Documentation](link-to-pr-environments-docs).
+The accessibility checks are triggered in PR preview environments on each PR update. For more information on how PR environments work, please refer to [PR Environments Documentation](../infra/pull-request-environments.md).
 
 ### Workflows
 
