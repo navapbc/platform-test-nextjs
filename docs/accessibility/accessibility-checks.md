@@ -35,3 +35,23 @@ The accessibility checks are configured using the following files:
 
 The desktop and mobile configuration extend the common base configuration.
 
+
+# Multiple App Configuration
+
+By default, the configuration files in the ./accessibility directory will be used (`.pa11yci-desktop.js` and `.pa11yci-mobile.js`).
+
+If you need to use different configurations for multiple apps, you can achieve this by defining additional jobs that call the `accessibility-scans` workflow with an `app_name`. The workflow will look for specific accessibility configuration files in the corresponding `app_name` directory. See the following possible directory structure:
+
+```
+- accessibility/
+  - .pa11yci-base-config.js
+  - .pa11yci-desktop.js
+  - .pa11yci-mobile.js
+  - app1/
+    - .pa11yci-desktop.js
+    - .pa11yci-mobile.js
+  - app2/
+    - .pa11yci-desktop.js
+    - .pa11yci-mobile.js
+  - screenshots-output/
+```

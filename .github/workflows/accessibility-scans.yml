@@ -38,9 +38,11 @@ jobs:
 
       - name: Run pa11y-ci Desktop
         run: |
-          set -e # Ensure the script fails if any command fails
-          npm run test:pa11y-desktop
-          echo "pa11y-ci desktop tests finished."
+          if [ -z "${{ inputs.app_name }}" ]; then
+            npm run test:pa11y-desktop
+          else
+            pa11y-ci --config ./accessibility/${{ inputs.app_name }}/.pa11yci-desktop.js
+          fi
         working-directory: ./accessibility
 
       - name: Upload screenshots to artifacts
@@ -77,9 +79,11 @@ jobs:
 
       - name: Run pa11y-ci Mobile
         run: |
-          set -e
-          npm run test:pa11y-mobile
-          echo "pa11y-ci mobile tests finished."
+          if [ -z "${{ inputs.app_name }}" ]; then
+            npm run test:pa11y-mobile
+          else
+            pa11y-ci --config ./accessibility/${{ inputs.app_name }}/.pa11yci-mobile.js
+          fi
         working-directory: ./accessibility
 
       - name: Upload screenshots to artifacts
