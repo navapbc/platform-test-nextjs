@@ -169,15 +169,6 @@ infra-test-service: ## Run service layer infra test suite
 lint-markdown: ## Lint Markdown docs for broken links
 	./bin/lint-markdown
 
-e2e-setup: ## Setup end-to-end tests
-  cd e2e && npm install
-  cd e2e && npx playwright install --with-deps
-  
-e2e-test: start setup-e2e ## Run end-to-end tests
-  @:$(call check_defined, APP_NAME, ...)
-  @:$(call check_defined, BASE_URL, ...)
-  cd e2e && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npx playwright test $(E2E_ARGS)
-
 ########################
 ## Release Management ##
 ########################
