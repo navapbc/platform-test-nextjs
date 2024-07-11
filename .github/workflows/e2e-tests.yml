@@ -45,7 +45,7 @@ jobs:
         working-directory: ./e2e
 
       - name: Run Playwright tests
-        run: npm run test:e2e
+        run: npm run e2e-test
         working-directory: ./e2e
 
       - name: Upload Playwright report
