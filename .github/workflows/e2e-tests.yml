@@ -17,7 +17,6 @@ jobs:
 
     env:
       BASE_URL: ${{ inputs.service_endpoint }}
-      APP_NAME: ${{ inputs.app_name }}
 
     steps:
       - name: Checkout code
@@ -44,9 +43,8 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: ./e2e
 
-      - name: Run Playwright tests
-        run: npm run e2e-test
-        working-directory: ./e2e
+      - name: Run e2e tests
+        run: npx playwright test --config ${{ inputs.app_name }}/playwright.config.ts
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v3
