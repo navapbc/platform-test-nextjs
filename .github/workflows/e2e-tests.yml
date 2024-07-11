@@ -44,7 +44,7 @@ jobs:
         working-directory: ./e2e
 
       - name: Run e2e tests
-        run: npx playwright test --config ${{ inputs.app_name }}/playwright.config.ts
+        run: npx playwright test --config ${{ inputs.app_name }}/playwright.config.js
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v3
