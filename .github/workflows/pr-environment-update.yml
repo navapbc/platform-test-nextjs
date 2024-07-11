@@ -55,16 +55,13 @@ jobs:
 
       - name: Update environment
         id: update-environment
-        run: ./bin/update-pr-environment "${{ inputs.app_name }}" "${{ inputs.environment }}" "${{ inputs.pr_number }}" "${{ inputs.commit_hash }}"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Capture service endpoint
-        id: get-service-endpoint
         run: |
+            ./bin/update-pr-environment "${{ inputs.app_name }}" "${{ inputs.environment }}" "${{ inputs.pr_number }}" "${{ inputs.commit_hash }}"
             service_endpoint=$(terraform -chdir="infra/${{ inputs.app_name }}/service" output -raw service_endpoint)
             echo "service_endpoint=${service_endpoint}"
             echo "service_endpoint=${service_endpoint}" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   e2e-tests:
     name: Run E2E Tests
