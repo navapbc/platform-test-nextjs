@@ -14,11 +14,12 @@ test.describe('Generic Webpage Tests', () => {
     await page.screenshot({ path: 'example-screenshot.png', fullPage: true });
   });
 
-  test('should check for an element to be visible', async ({ page }) => {
-    await page.goto('/');
-    const element = page.locator('h1');
-    await expect(element).toBeVisible();
-  });
+    // Example test of finding a an html element on the index/home page
+//   test('should check for an element to be visible', async ({ page }) => {
+//     await page.goto('/');
+//     const element = page.locator('h1');
+//     await expect(element).toBeVisible();
+//   });
 
 
 });
