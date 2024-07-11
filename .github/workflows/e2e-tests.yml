@@ -37,7 +37,7 @@ jobs:
         working-directory: ./e2e
 
       - name: Cat Playwright config
-        run: cat ./e2e/playwright.config.ts
+        run: cat ./e2e/playwright.config.js
 
       - name: Run Playwright tests
         run: npm run test:e2e
