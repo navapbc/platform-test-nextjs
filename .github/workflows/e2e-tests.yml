@@ -28,13 +28,20 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install required dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwoff1 libopus0 libwebp6 libwebpdemux2 libenchant1c2a libgudev-1.0-0 libsecret-1-0 libhyphen0 libgstreamer1.0-0 libgstreamer-plugins-base1.0-0 gstreamer1.0-plugins-base gstreamer1.0-libav gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-alsa gstreamer1.0-pulseaudio libevent-2.1-7 libvpx7 libflite1 libgles2-mesa libx264-155
+          sudo apt-get install -y libwoff1 libopus0 libvpx7 libevent-2.1-7 libopus0 libgstreamer1.0-0 \
+          libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libharfbuzz-icu0 libhyphen0 \
+          libenchant-2-2 libflite1 libgles2 libx264-155
+        working-directory: ./e2e
 
-      - name: Install dependencies
+      - name: Install Node.js dependencies
         run: npm ci
+        working-directory: ./e2e
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
         working-directory: ./e2e
 
       - name: Run Playwright tests
