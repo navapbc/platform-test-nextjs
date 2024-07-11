@@ -32,6 +32,13 @@ jobs:
         run: npm ci
         working-directory: ./e2e
 
+      - name: Install Playwright browsers
+        run: npx playwright install
+        working-directory: ./e2e
+
+      - name: Cat Playwright config
+        run: cat ./e2e/playwright.config.ts
+
       - name: Run Playwright tests
         run: npm run test:e2e
         working-directory: ./e2e
