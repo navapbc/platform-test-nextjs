@@ -36,7 +36,7 @@ jobs:
     concurrency: pr-environment-${{ inputs.pr_number }}
 
     outputs:
-      service_endpoint: ${{ steps.get-service-endpoint.outputs.service_endpoint }}
+      service_endpoint: ${{ steps.update-environment.outputs.service_endpoint }}
 
     steps:
       - uses: actions/checkout@v4
