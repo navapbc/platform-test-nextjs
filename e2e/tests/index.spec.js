@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Generic Webpage Tests', () => {
   test('should load the webpage and verify title', async ({ page }) => {
-    await page.goto('/');
+    const response = await page.goto('/');
     const title = await page.title();
     // Modify this expectation based on your actual page title
     await expect(response.status()).toBe(200);
