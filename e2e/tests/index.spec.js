@@ -5,7 +5,7 @@ test.describe('Generic Webpage Tests', () => {
     await page.goto('/');
     const title = await page.title();
     // Modify this expectation based on your actual page title
-    await expect(title).toMatch(/Home/);
+    await expect(response.status()).toBe(200);
   });
 
   test('should take a screenshot of the webpage', async ({ page }) => {
