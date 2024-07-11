@@ -4,7 +4,6 @@ test.describe('Generic Webpage Tests', () => {
   test('should load the webpage and verify title', async ({ page }) => {
     await page.goto('/');
     const title = await page.title();
-    console.log(`Page title: ${title}`);
     // Modify this expectation based on your actual page title
     await expect(title).toMatch(/Home/);
   });
