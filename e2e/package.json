@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "e2e-setup": "npx playwright install",
-    "e2e-tests": "dotenv -- cross-var npx playwright test --config %APP_NAME%/playwright.config.js",
-    "e2e-tests-ci": "cross-var npx playwright test --config %APP_NAME%/playwright.config.js",
+    "e2e-test": "dotenv npx playwright test --config %APP_NAME%/playwright.config.js",
+    "e2e-test-ci": "cross-var npx playwright test --config %APP_NAME%/playwright.config.js",
     "e2e-test:ui": "npx playwright test --ui"
   },
   "devDependencies": {
