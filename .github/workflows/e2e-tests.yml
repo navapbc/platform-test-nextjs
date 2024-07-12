@@ -44,8 +44,7 @@ jobs:
         working-directory: ./e2e
 
       - name: Run e2e tests
-        run: npm run e2e-test-ci
-        working-directory: ./e2e
+        run: make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
         env:
           BASE_URL: ${{ inputs.service_endpoint }}
           APP_NAME: ${{ inputs.app_name }}
