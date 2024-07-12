@@ -225,6 +225,8 @@ e2e-setup: ## Setup end-to-end tests
 	@cd e2e && npm install
 	@cd e2e && npx playwright install --with-deps
 
+e2e-setup-ci: ## Install dependencies and Playwright browsers
+	cd e2e && npx playwright install --with-deps
 
 e2e-test: ## Run end-to-end tests
     # make e2e-test APP_NAME=app BASE_URL=http://localhost:3000
