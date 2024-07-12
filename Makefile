@@ -217,9 +217,9 @@ release-image-name: ## Prints the image name of the release image
 release-image-tag: ## Prints the image tag of the release image
 	@echo $(IMAGE_TAG)
 
-########################
-## e2e                ##
-########################
+##############################
+## End-to-end (E2E) Testing ##
+##############################
 
 e2e-setup: ## Setup end-to-end tests
 	@cd e2e && npm install
