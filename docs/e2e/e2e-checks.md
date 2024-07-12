@@ -71,3 +71,5 @@ The E2E tests are configured using the following files:
 - [App-specific Configuration](../../e2e/app/playwright.config.js)
 
 The app-specific configuration files extend the common base configuration.
+
+By default when running `make e2e-test APP_NAME=app BASE_URL=http://localhost:3000 ` - you don't necessarily need to pass an `BASE_URL` since the default is defined in the app-specific playwright config (`./e2e/app/playwright.config.js`).
