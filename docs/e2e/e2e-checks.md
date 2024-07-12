@@ -22,7 +22,7 @@ In order to support e2e for multiple apps, the folder structure will include a b
 Some highlights:
 - By default, the base config is defined to run on a minimal browser-set (desktop and mobile chrome)
 - Snapshots will be output locally or in the artifacts of the CI job
-- html reports are output to the `playwright-report` folder
+- HTML reports are output to the `playwright-report` folder
 - Parallelism limited on CI to ensure stable execution
 
 
