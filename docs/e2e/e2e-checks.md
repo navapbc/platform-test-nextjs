@@ -68,6 +68,6 @@ The [E2E Tests Workflow](../../.github/workflows/e2e-tests.yml) takes a `service
 
 The E2E tests are configured using the following files:
 - [Base Configuration](../../e2e/playwright.config.js)
-- [App-specific Configuration](../../e2e/<APP_NAME>/playwright.config.js)
+- [App-specific Configuration](../../e2e/app/playwright.config.js)
 
 The app-specific configuration files extend the common base configuration.
