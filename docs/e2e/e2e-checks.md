@@ -24,6 +24,7 @@ Some highlights:
 - Snapshots will be output locally or in the artifacts of the CI job
 - HTML reports are output to the `playwright-report` folder
 - Parallelism limited on CI to ensure stable execution
+- Accessibility testing can be performed using the `@axe-core/playwright` package (https://playwright.dev/docs/accessibility-testing)
 
 
 ## Running Locally
