@@ -15,6 +15,7 @@ on:
       commit_hash:
         required: true
         type: string
+
 jobs:
   build-and-publish:
     name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
@@ -36,6 +37,9 @@ jobs:
 
     concurrency: pr-environment-${{ inputs.pr_number }}
 
+    outputs:
+      service_endpoint: ${{ steps.get-service-endpoint.outputs.service_endpoint }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -52,6 +56,21 @@ jobs:
           environment: ${{ inputs.environment }}
 
       - name: Update environment
+        id: update-environment
         run: ./bin/update-pr-environment "${{ inputs.app_name }}" "${{ inputs.environment }}" "${{ inputs.pr_number }}" "${{ inputs.commit_hash }}"
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: Capture service endpoint
+        id: get-service-endpoint
+        run: |
+            service_endpoint=$(terraform -chdir="infra/${{ inputs.app_name }}/service" output -raw service_endpoint)
+            echo "service_endpoint=${service_endpoint}"
+            echo "service_endpoint=${service_endpoint}" >> "$GITHUB_OUTPUT"
+
+  accessibility:
+    name: Accessibility Checks
+    needs: [update]
+    uses: ./.github/workflows/accessibility-scans.yml
+    with:
+      service_endpoint: ${{ needs.update.outputs.service_endpoint }}

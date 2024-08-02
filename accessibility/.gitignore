@@ -1,0 +1,5 @@
+node_modules/*
+.env
+
+# pa11y screenshot outputs
+*.png

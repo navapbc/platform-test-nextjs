@@ -1,0 +1,17 @@
+{
+  "name": "accessibility",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:pa11y-desktop": "pa11y-ci --config .pa11yci-desktop.js",
+    "test:pa11y-mobile": "pa11y-ci --config .pa11yci-mobile.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pa11y-ci": "^3.1.0"
+  }
+}

@@ -55,3 +55,8 @@ storybook: # Run the Storybook local dev server in Docker
 
 stop:
 	docker compose down
+
+
+lint-github-actions: # Run actionlint on the .github folder
+	@echo "Running actionlint on the .github folder..."
+	@actionlint -color
