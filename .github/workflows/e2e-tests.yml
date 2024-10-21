@@ -22,10 +22,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Since the Docker image includes dependencies, no need to set up Node.js or Playwright browsers
       - name: Install make
         run: apt-get update && apt-get install -y make
 
+      # Install project dependencies
+      - name: Install npm dependencies
+        run: npm ci
 
       - name: Run e2e tests
         run: make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
