@@ -236,7 +236,6 @@ e2e-setup-ci: ## Install system dependencies, Node dependencies, and Playwright 
 	libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libharfbuzz-icu0 libhyphen0 \
 	libenchant-2-2 libflite1 libgles2 libx264-dev
 	cd e2e && npm ci
-	cd e2e && npx playwright install --with-deps
 
 
 e2e-test: ## Run end-to-end tests
