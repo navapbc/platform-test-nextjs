@@ -15,17 +15,14 @@ jobs:
     name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
     runs-on: ubuntu-latest
 
+    container:
+      image: mcr.microsoft.com/playwright:v1.48.1-noble
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Playwright browsers
-        run: make e2e-setup-ci
+      # Since the Docker image includes dependencies, no need to set up Node.js or Playwright browsers
 
       - name: Run e2e tests
         run: make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
