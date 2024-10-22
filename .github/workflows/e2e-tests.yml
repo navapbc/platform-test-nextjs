@@ -26,7 +26,9 @@ jobs:
       # Run the Playwright tests inside the Docker container
       # Ensure APP_NAME and BASE_URL are passed in correctly
       - name: Run E2E tests in Docker container
-        run: docker run --rm -w /app playwright-e2e make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
+        run: |
+          docker run --rm -w /app playwright-e2e make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
+          docker cp playwright-e2e-container:/app/e2e/playwright-report ./playwright-report
 
       # Upload Playwright report as an artifact
       - name: Upload Playwright report
