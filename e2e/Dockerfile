@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y make
 WORKDIR /app
 
 # Copy the entire project, including Makefile, into the Docker image
-COPY ../ .
+COPY . .
 
 # Change directory to e2e for subsequent commands
 WORKDIR /app/e2e
