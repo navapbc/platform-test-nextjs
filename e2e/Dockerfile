@@ -16,5 +16,8 @@ WORKDIR /app/e2e
 # Install the dependencies
 RUN npm ci
 
+# Change the working directory back to the root to run the Makefile
+WORKDIR /app
+
 # Define the default command to run the tests (you can override this in your CI or local runs)
 CMD ["make", "e2e-test"]
