@@ -28,11 +28,11 @@ jobs:
       - name: Run E2E tests in Docker container
         run: |
           docker run --rm -w /app playwright-e2e make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
-          docker cp playwright-e2e-container:/app/e2e/playwright-report ./playwright-report
+          docker cp playwright-e2e:/app/e2e/playwright-report ./e2e/playwright-report
 
       # Upload Playwright report as an artifact
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: ./playwright-report
+          path: ./e2e/playwright-report
