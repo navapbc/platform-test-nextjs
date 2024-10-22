@@ -21,7 +21,7 @@ jobs:
 
       # Build the Docker image using the Dockerfile in the ./e2e/ folder
       - name: Build Docker image
-        run: docker build -t playwright-e2e ./e2e
+        run: docker build -t playwright-e2e .
 
       # Run the Playwright tests inside the Docker container
       - name: Run E2E tests in Docker container
