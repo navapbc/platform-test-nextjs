@@ -83,6 +83,8 @@ Some highlights:
   </tr>
 </table>
 
+* Running local with Docker is the recommended approach
+
 ### PR Environments
 
 The E2E tests are triggered in PR preview environments on each PR update. For more information on how PR environments work, please refer to [PR Environments Documentation](../infra/pull-request-environments.md).
