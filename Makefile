@@ -241,14 +241,6 @@ e2e-setup: ## Setup end-to-end tests
 	@cd e2e && npm install
 	@cd e2e && npx playwright install --with-deps
 
-e2e-setup-ci: ## Install system dependencies, Node dependencies, and Playwright browsers
-	sudo apt-get update
-	sudo apt-get install -y libwoff1 libopus0 libvpx7 libevent-2.1-7 libopus0 libgstreamer1.0-0 \
-	libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libharfbuzz-icu0 libhyphen0 \
-	libenchant-2-2 libflite1 libgles2 libx264-dev
-	cd e2e && npm ci
-
-
 e2e-test: ## Run end-to-end tests
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
