@@ -26,29 +26,63 @@ Some highlights:
 - Parallelism limited on CI to ensure stable execution
 - Accessibility testing can be performed using the `@axe-core/playwright` package (https://playwright.dev/docs/accessibility-testing)
 
+## How to Run Tests
+<table border="1" style="width:100%; text-align:center;">
+  <tr>
+    <th></th>
+    <th>Local Natively Without Docker</th>
+    <th>Local With Docker</th>
+    <th>CI / Github Actions</th>
+  </tr>
+  <tr>
+  <td>Location App is Running</td>
+  <td colspan="2" style="vertical-align:top;">Locally (*port 3000 in examples) </td>
+  <td>PR Preview Environment</td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">With make commands</td>
+    <td style="vertical-align:top;">
+      From root folder:<br>
+      <ul style="list-style-position:inside; text-align:left;">
+        <li><code>make e2e-setup-native</code></li>
+        <li><code>make e2e-test</code></li>
+        <li><code>make e2e-copy-report</code></li>
+      </ul>
+    </td>
+    <td style="vertical-align:top;">
+      From root folder:<br>
+      <ul style="list-style-position:inside; text-align:left;">
+        <li><code>make e2e-build</code></li>
+        <li><code>make e2e-run APP_NAME=app BASE_URL=http://host.docker.internal:3000</code></li>
+        <br />
+        <em>* BASE_URL cannot use localhost</em>
+      </ul>
+    </td>
+    <td style="vertical-align:top;">
+      <em>* uses make commands <br /><br /> see the relevant <a href="../../.github/workflows/e2e-tests.yml">e2e Github Actions workflow file</a>
 
-## Running Locally
-
-### Running Locally From the Root Directory
-
-Make targets are setup to easily pass in a particular app name and URL to run tests against
-
-```bash
-make e2e-setup # install playwright deps
-make e2e-test APP_NAME=app BASE_URL=http://localhost:3000 # run tests on a particular app
-```
-
-### Running Locally From the `./e2e` Directory
-
-If you prefer to run package.json run scripts, you can do so from the e2e folder:
-
-```
-cd e2e
-
-npm install
-
-APP_NAME=app npm run e2e-test
-```
+</em>
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">Without make commands</td>
+    <td style="vertical-align:top;">
+      From <code>./e2e</code> folder:<br>
+      <ul style="list-style-position:inside; text-align:left;">
+        <li><code>npm install</code></li>
+        <li><code>npm run e2e-setup</code></li>
+        <li><code>APP_NAME=app BASE_URL=http://localhost:3000 npm run e2e-test</code></li>
+      </ul>
+    </td>
+    <td style="vertical-align:top;">N/A</td>
+    <td style="vertical-align:top;">N/A</td>
+  </tr>
+  <tr>
+    <td style="vertical-align:top;">Show Report</td>
+    <td colspan="2" style="vertical-align:top;"><code>npx playwright show-report</code></td>
+    <td style="vertical-align:top;">View Artifacts of Github Actions job</td>
+  </tr>
+</table>
 
 ### PR Environments
 
