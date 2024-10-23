@@ -229,6 +229,11 @@ release-image-tag: ## Prints the image tag of the release image
 e2e-build: ## Build the Docker image using the Dockerfile in the ./e2e/ folder
 	docker build -t playwright-e2e -f ./e2e/Dockerfile .
 
+e2e-run: ## Run the Playwright tests in Docker container
+	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
+	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
+	docker run --name playwright-e2e-container -w /app playwright-e2e make e2e-test APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL)
+
 e2e-setup: ## Setup end-to-end tests
 	@cd e2e && npm install
 	@cd e2e && npx playwright install --with-deps
