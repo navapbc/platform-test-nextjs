@@ -60,8 +60,7 @@ Some highlights:
     </td>
     <td style="vertical-align:top;">
       <em>* uses make commands <br /><br /> see the relevant <a href="../../.github/workflows/e2e-tests.yml">e2e Github Actions workflow file</a>
-
-</em>
+    </em>
     </td>
   </tr>
   <tr>
