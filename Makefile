@@ -226,6 +226,9 @@ release-image-tag: ## Prints the image tag of the release image
 ## End-to-end (E2E) Testing ##
 ##############################
 
+e2e-build: ## Build the Docker image using the Dockerfile in the ./e2e/ folder
+	docker build -t playwright-e2e -f ./e2e/Dockerfile .
+
 e2e-setup: ## Setup end-to-end tests
 	@cd e2e && npm install
 	@cd e2e && npx playwright install --with-deps

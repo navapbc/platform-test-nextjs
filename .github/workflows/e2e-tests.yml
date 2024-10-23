@@ -21,14 +21,14 @@ jobs:
 
       # Build the Docker image using the Dockerfile in the ./e2e/ folder
       - name: Build Docker image
-        run: docker build -t playwright-e2e -f ./e2e/Dockerfile .
+        run: make e2e-build
 
-      # Run the Playwright tests inside the Docker container (without --rm flag)
+      # Run the Playwright tests inside the Docker container
       - name: Run E2E tests in Docker container
         run: |
           docker run --name playwright-e2e-container -w /app playwright-e2e make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
 
-      # Copy the Playwright report from the container
+      # Copy the Playwright report from the container, so we can upload in later step
       - name: Copy Playwright report
         run: docker cp playwright-e2e-container:/app/e2e/playwright-report ./e2e/playwright-report
 
@@ -36,7 +36,6 @@ jobs:
       - name: Remove Docker container
         run: docker rm playwright-e2e-container
 
-      # Upload Playwright report as an artifact
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
         with:
