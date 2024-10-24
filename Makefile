@@ -232,13 +232,19 @@ release-image-tag: ## Prints the image tag of the release image
 e2e-build: ## Build the Docker image using the Dockerfile in the ./e2e/ folder
 	docker build -t playwright-e2e -f ./e2e/Dockerfile .
 
-e2e-run: ## Run the Playwright tests in a Docker container
+e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	docker run --name playwright-e2e-container -w /app playwright-e2e make e2e-test APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL)
+	$(MAKE) e2e-clean-report
+	$(MAKE) e2e-copy-report
+	docker rm playwright-e2e-container
 
 e2e-copy-report: ## Copy the Playwright report from the container to local
 	docker cp playwright-e2e-container:/app/e2e/playwright-report ./e2e/playwright-report
+
+e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
+	rm -rf ./e2e/playwright-report
 
 e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
