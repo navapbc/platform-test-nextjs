@@ -1,3 +1,4 @@
-_commit: f7661c4
-_src_path: https://github.com/navapbc/template-infra
+# Changes here will be overwritten by Copier
+_commit: v0.12.4-7-g3f649ef
+_src_path: ../template-infra
 app_name: template-only
