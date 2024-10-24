@@ -9,7 +9,6 @@ WORKDIR /app
 
 # Copy the required files and directories from the root of the project into the Docker container
 COPY Makefile /app/Makefile
-COPY app /app/app
 COPY e2e /app/e2e
 
 # Install the dependencies inside the /e2e directory
@@ -21,4 +20,3 @@ RUN npx playwright install --with-deps
 
 # Change the working directory back to the root to run the Makefile
 WORKDIR /app
-
