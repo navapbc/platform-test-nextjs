@@ -60,7 +60,10 @@ __check_defined = \
 	release-image-tag \
 	release-publish \
 	release-run-database-migrations \
-	e2e-setup \
+	e2e-build \
+	e2e-run \
+	e2e-copy-report \
+	e2e-setup-native \
 	e2e-test
 
 infra-set-up-account: ## Configure and create resources for current AWS profile and save tfbackend file to infra/accounts/$ACCOUNT_NAME.ACCOUNT_ID.s3.tfbackend
@@ -226,18 +229,26 @@ release-image-tag: ## Prints the image tag of the release image
 ## End-to-end (E2E) Testing ##
 ##############################
 
-e2e-setup: ## Setup end-to-end tests
+e2e-build: ## Build the Docker image using the Dockerfile in the ./e2e/ folder
+	docker build -t playwright-e2e -f ./e2e/Dockerfile .
+
+e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
+	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
+	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
+	docker rm -f playwright-e2e-container || true
+	docker run --name playwright-e2e-container -w /app playwright-e2e make e2e-test APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL)
+	$(MAKE) e2e-clean-report
+	$(MAKE) e2e-copy-report
+
+e2e-copy-report: ## Copy the Playwright report from the container to local
+	docker cp playwright-e2e-container:/app/e2e/playwright-report ./e2e/playwright-report
+
+e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
+	rm -rf ./e2e/playwright-report
+
+e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
 	@cd e2e && npx playwright install --with-deps
-
-e2e-setup-ci: ## Install system dependencies, Node dependencies, and Playwright browsers
-	sudo apt-get update
-	sudo apt-get install -y libwoff1 libopus0 libvpx7 libevent-2.1-7 libopus0 libgstreamer1.0-0 \
-	libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libharfbuzz-icu0 libhyphen0 \
-	libenchant-2-2 libflite1 libgles2 libx264-dev
-	cd e2e && npm ci
-	cd e2e && npx playwright install --with-deps
-
 
 e2e-test: ## Run end-to-end tests
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
