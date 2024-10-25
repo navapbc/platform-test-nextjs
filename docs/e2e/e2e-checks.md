@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository uses [Playwright](https://playwright.dev/) to perform end-to-end (E2E) tests. The tests can be run locally, but also run on [Pull Request preview environments](../infra/pull-request-environments.md). This ensures that any new code changes are validated through E2E tests before being merged.
+This repository uses [Playwright](https://playwright.dev/) to perform end-to-end (E2E) tests. The tests can be run locally (natively or within Docker), but they also run on [Pull Request preview environments](../infra/pull-request-environments.md). This ensures that any new code changes are validated through E2E tests before being merged.
 
 ## Folder Structure
 In order to support e2e for multiple apps, the folder structure will include a base playwright config (`./e2e/playwright.config.js`), and app-specific derived playwright config that override the base config. See the example folder structure below:
@@ -45,7 +45,7 @@ Some highlights:
       From root folder:<br>
       <ul style="list-style-position:inside; text-align:left;">
         <li><code>make e2e-setup-native</code></li>
-        <li><code>make e2e-test</code></li>
+        <li><code>make e2e-test APP_NAME=app BASE_URL=http://localhost:3001</code></li>
         <li><code>make e2e-copy-report</code></li>
       </ul>
     </td>
@@ -78,12 +78,14 @@ Some highlights:
   </tr>
   <tr>
     <td style="vertical-align:top;">Show Report</td>
-    <td colspan="2" style="vertical-align:top;"><code>npx playwright show-report</code></td>
+    <td colspan="2" style="vertical-align:top;">From the <code>./e2e</code> folder: <br /><code>npx playwright show-report</code></td>
     <td style="vertical-align:top;">View Artifacts of Github Actions job</td>
   </tr>
 </table>
 
-* Running local with Docker is the recommended approach
+- Running local with Docker is the preferred approach
+    - When running locally with Docker, the `playwright-report` will be copied to your local `./e2e/` folder
+- For all local runs, your application needs to be running
 
 ### PR Environments
 
