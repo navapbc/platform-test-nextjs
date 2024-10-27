@@ -237,6 +237,15 @@ e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dock
 	  echo "Docker image already exists, skipping build."; \
 	fi
 
+e2e-copy-report: ## Copy the Playwright report from the container to local
+	docker cp playwright-e2e-container:/e2e/playwright-report ./e2e/playwright-report
+
+e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
+	rm -rf ./e2e/playwright-report
+
+e2e-delete-image: ## Delete the Docker image for e2e tests entirely
+	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
+
 e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
 e2e-run: e2e-build
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
@@ -246,21 +255,13 @@ e2e-run: e2e-build
 	$(MAKE) e2e-clean-report
 	$(MAKE) e2e-copy-report
 
-e2e-delete-image: ## Delete the Docker image for e2e tests entirely
-	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
-
-e2e-copy-report: ## Copy the Playwright report from the container to local
-	docker cp playwright-e2e-container:/e2e/playwright-report ./e2e/playwright-report
-
-e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
-	rm -rf ./e2e/playwright-report
+e2e-setup-native: ## Setup end-to-end tests
+	@cd e2e && npm install
+	@cd
+	e2e && npx playwright install --with-deps
 
 e2e-show-report: ## Show the ./e2e/playwright-report
 	@cd e2e && npx playwright show-report
-
-e2e-setup-native: ## Setup end-to-end tests
-	@cd e2e && npm install
-	@cd e2e && npx playwright install --with-deps
 
 e2e-test: ## Run end-to-end tests
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
