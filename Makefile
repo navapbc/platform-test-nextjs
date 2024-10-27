@@ -229,15 +229,20 @@ release-image-tag: ## Prints the image tag of the release image
 ## End-to-end (E2E) Testing ##
 ##############################
 
-e2e-build: ## Build the Docker image using the Dockerfile in the ./e2e/ folder
-	docker build -t playwright-e2e -f ./e2e/Dockerfile .
+e2e-check-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
+	@if [ -z "$$(docker images -q playwright-e2e)" ]; then \
+	  echo "Building Docker image..."; \
+	  docker build -t playwright-e2e -f ./e2e/Dockerfile .; \
+	else \
+	  echo "Docker image already exists, skipping build."; \
+	fi
 
 e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
 e2e-run: e2e-build
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	docker rm -f playwright-e2e-container || true
-	docker run --name playwright-e2e-container -w /app playwright-e2e make e2e-test APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL)
+	docker run --name playwright-e2e-container -w /app -e APP_NAME=$(APP_NAME) -e BASE_URL=$(BASE_URL) playwright-e2e
 	$(MAKE) e2e-clean-report
 	$(MAKE) e2e-copy-report
 

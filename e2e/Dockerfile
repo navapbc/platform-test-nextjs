@@ -20,3 +20,6 @@ RUN npx playwright install --with-deps
 
 # Change the working directory back to the root to run the Makefile
 WORKDIR /app
+
+# Default command when running the container
+CMD ["make", "e2e-test"]
