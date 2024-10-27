@@ -243,7 +243,7 @@ e2e-copy-report: ## Copy the Playwright report from the container to local
 e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
 	rm -rf ./e2e/playwright-report
 
-e2e-delete-image: ## Delete the Docker image for e2e tests entirely
+e2e-delete-image: ## Delete the Docker image for e2e tests
 	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
 
 e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
