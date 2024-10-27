@@ -257,8 +257,7 @@ e2e-run: e2e-build
 
 e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
-	@cd
-	e2e && npx playwright install --with-deps
+	@cd	e2e && npx playwright install --with-deps
 
 e2e-show-report: ## Show the ./e2e/playwright-report
 	@cd e2e && npx playwright show-report
