@@ -26,6 +26,11 @@ Some highlights:
 - Parallelism limited on CI to ensure stable execution
 - Accessibility testing can be performed using the `@axe-core/playwright` package (https://playwright.dev/docs/accessibility-testing)
 
+### Running with Docker
+
+
+
+
 ## How to Run Tests
 <table border="1" style="width:100%; text-align:center;">
   <tr>
@@ -52,7 +57,6 @@ Some highlights:
     <td style="vertical-align:top;">
       From root folder:<br>
       <ul style="list-style-position:inside; text-align:left;">
-        <li><code>make e2e-build</code></li>
         <li><code>make e2e-run APP_NAME=app BASE_URL=http://host.docker.internal:3000</code></li>
         <br />
         <em>* BASE_URL cannot use localhost</em>
@@ -63,22 +67,10 @@ Some highlights:
     </em>
     </td>
   </tr>
-  <tr>
-    <td style="vertical-align:top;">Without make commands</td>
-    <td style="vertical-align:top;">
-      From <code>./e2e</code> folder:<br>
-      <ul style="list-style-position:inside; text-align:left;">
-        <li><code>npm install</code></li>
-        <li><code>npm run e2e-setup</code></li>
-        <li><code>APP_NAME=app BASE_URL=http://localhost:3000 npm run e2e-test</code></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">N/A</td>
-    <td style="vertical-align:top;">N/A</td>
-  </tr>
+
   <tr>
     <td style="vertical-align:top;">Show Report</td>
-    <td colspan="2" style="vertical-align:top;">From the <code>./e2e</code> folder: <br /><code>npx playwright show-report</code></td>
+    <td colspan="2" style="vertical-align:top;">From the root: <br /><code>make e2e-show-report</code></td>
     <td style="vertical-align:top;">View Artifacts of Github Actions job</td>
   </tr>
 </table>
@@ -86,6 +78,7 @@ Some highlights:
 - Running local with Docker is the preferred approach
     - When running locally with Docker, the `playwright-report` will be copied to your local `./e2e/` folder
 - For all local runs, your application needs to be running
+
 
 ### PR Environments
 
