@@ -50,7 +50,7 @@ Some highlights:
       From root folder:<br>
       <ul style="list-style-position:inside; text-align:left;">
         <li><code>make e2e-setup-native</code></li>
-        <li><code>make e2e-test APP_NAME=app BASE_URL=http://localhost:3001</code></li>
+        <li><code>make e2e-test APP_NAME=app BASE_URL=http://localhost:3000</code></li>
         <li><code>make e2e-copy-report</code></li>
       </ul>
     </td>
