@@ -233,6 +233,7 @@ e2e-build: ## Build the Docker image using the Dockerfile in the ./e2e/ folder
 	docker build -t playwright-e2e -f ./e2e/Dockerfile .
 
 e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
+e2e-run: e2e-build
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	docker rm -f playwright-e2e-container || true
@@ -245,6 +246,9 @@ e2e-copy-report: ## Copy the Playwright report from the container to local
 
 e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
 	rm -rf ./e2e/playwright-report
+
+e2e-show-report: ## Show the ./e2e/playwright-report
+	@cd e2e && npx playwright show-report
 
 e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
