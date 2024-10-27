@@ -28,9 +28,12 @@ __check_defined = \
 
 .PHONY : \
 	e2e-build \
+	e2e-clean-report \
 	e2e-copy-report \
+	e2e-delete-image \
 	e2e-run \
 	e2e-setup-native \
+	e2e-show-report \
 	e2e-test \
 	help \
 	infra-check-app-database-roles \
