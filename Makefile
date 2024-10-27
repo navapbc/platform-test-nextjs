@@ -229,7 +229,7 @@ release-image-tag: ## Prints the image tag of the release image
 ## End-to-end (E2E) Testing ##
 ##############################
 
-e2e-check-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
+e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
 	@if [ -z "$$(docker images -q playwright-e2e)" ]; then \
 	  echo "Building Docker image..."; \
 	  docker build -t playwright-e2e -f ./e2e/Dockerfile .; \
