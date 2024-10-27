@@ -27,6 +27,11 @@ __check_defined = \
 
 
 .PHONY : \
+	e2e-build \
+	e2e-copy-report \
+	e2e-run \
+	e2e-setup-native \
+	e2e-test \
 	help \
 	infra-check-app-database-roles \
 	infra-check-compliance-checkov \
@@ -59,12 +64,7 @@ __check_defined = \
 	release-image-name \
 	release-image-tag \
 	release-publish \
-	release-run-database-migrations \
-	e2e-build \
-	e2e-run \
-	e2e-copy-report \
-	e2e-setup-native \
-	e2e-test
+	release-run-database-migrations
 
 infra-set-up-account: ## Configure and create resources for current AWS profile and save tfbackend file to infra/accounts/$ACCOUNT_NAME.ACCOUNT_ID.s3.tfbackend
 	@:$(call check_defined, ACCOUNT_NAME, human readable name for account e.g. "prod" or the AWS account alias)
