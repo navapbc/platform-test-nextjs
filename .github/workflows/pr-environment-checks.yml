@@ -65,7 +65,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
   e2e-tests:
-    name: Run E2E Tests
+    name: " "
     needs: [update]
     uses: ./.github/workflows/e2e-tests.yml
     with:
