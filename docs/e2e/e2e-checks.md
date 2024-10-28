@@ -28,9 +28,6 @@ Some highlights:
 
 ### Running with Docker
 
-
-
-
 ## How to Run Tests
 <table border="1" style="width:100%; text-align:center;">
   <tr>
