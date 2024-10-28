@@ -248,10 +248,13 @@ e2e-run: ## Run the Playwright tests in a Docker container and copy the report l
 e2e-run: e2e-build
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
-	docker rm -f playwright-e2e-container || true
-	docker run --name playwright-e2e-container -e APP_NAME=$(APP_NAME) -e BASE_URL=$(BASE_URL) playwright-e2e
-	$(MAKE) e2e-clean-report
-	$(MAKE) e2e-copy-report
+	mkdir -p ./e2e/playwright-report  # Ensure the local report directory exists
+	docker run --rm \
+		--name playwright-e2e-container \
+		-e APP_NAME=$(APP_NAME) \
+		-e BASE_URL=$(BASE_URL) \
+		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
+		playwright-e2e
 
 e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
