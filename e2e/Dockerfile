@@ -11,12 +11,8 @@ WORKDIR /
 COPY Makefile /Makefile
 COPY e2e /e2e
 
-# Install the dependencies inside the /e2e directory
-WORKDIR /e2e
-RUN npm ci
-
-# Install Playwright browsers and other necessary system dependencies
-RUN npx playwright install --with-deps
+# Run the Makefile target to set up end-to-end tests for CI
+RUN make e2e-setup-ci
 
 # Change the working directory back to the root to run the Makefile
 WORKDIR /

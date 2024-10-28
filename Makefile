@@ -262,6 +262,10 @@ e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
 	@cd e2e && npx playwright install --with-deps
 
+e2e-setup-ci: ## Setup end-to-end tests for CI
+	@cd e2e && npm ci
+	@cd e2e && npx playwright install --with-deps
+
 e2e-show-report: ## Show the ./e2e/playwright-report
 	@cd e2e && npx playwright show-report
 
