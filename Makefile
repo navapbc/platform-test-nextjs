@@ -233,12 +233,7 @@ release-image-tag: ## Prints the image tag of the release image
 ##############################
 
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
-	@if [ -z "$$(docker images -q playwright-e2e)" ]; then \
-	  echo "Building Docker image..."; \
-	  docker build -t playwright-e2e -f ./e2e/Dockerfile .; \
-	else \
-	  echo "Docker image already exists, skipping build."; \
-	fi
+	docker build -t playwright-e2e -f ./e2e/Dockerfile .
 
 e2e-copy-report: ## Copy the Playwright report from the container to local
 	docker cp playwright-e2e-container:/e2e/playwright-report ./e2e/playwright-report
