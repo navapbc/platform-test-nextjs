@@ -21,63 +21,53 @@ In order to support e2e for multiple apps, the folder structure will include a b
 
 Some highlights:
 - By default, the base config is defined to run on a minimal browser-set (desktop and mobile chrome). Browsers can be added in the app-specific playwright config.
-- Snapshots will be output locally or in the artifacts of the CI job
+- Snapshots will be output locally (in the `./e2e` folder or the container) - or in the artifacts of the CI job
 - HTML reports are output to the `playwright-report` folder
-- Parallelism limited on CI to ensure stable execution
 - Accessibility testing can be performed using the `@axe-core/playwright` package (https://playwright.dev/docs/accessibility-testing)
 
-### Running with Docker
+## Running Tests Locally
+
+### Running Tests with Docker (preferred)
+
+First, make sure the application you want to test is running.
+
+Then, run end-to-end tests using Docker with:
+```bash
+make e2e-run APP_NAME=app BASE_URL=http://host.docker.internal:3000
+```
+
+*Note that `BASE_URL` cannot be `localhost`
 
 
+### Running tests Natively
+
+First, make sure the application you want to test is running.
+
+To run end-to-end tests natively, first install Playwright with:
+
+```bash
+make e2e-setup-native
+```
+
+Then, run the tests with your app name and base url:
+```bash
+make e2e-test APP_NAME=app BASE_URL=http://localhost:3000
+```
 
 
-## How to Run Tests
-<table border="1" style="width:100%; text-align:center;">
-  <tr>
-    <th></th>
-    <th>Local Natively Without Docker</th>
-    <th>Local With Docker</th>
-    <th>CI / Github Actions</th>
-  </tr>
-  <tr>
-  <td>Location App is Running</td>
-  <td colspan="2" style="vertical-align:top;">Locally (*port 3000 in examples) </td>
-  <td>PR Preview Environment</td>
-  </tr>
-  <tr>
-    <td style="vertical-align:top;">With make commands</td>
-    <td style="vertical-align:top;">
-      From root folder:<br>
-      <ul style="list-style-position:inside; text-align:left;">
-        <li><code>make e2e-setup-native</code></li>
-        <li><code>make e2e-test APP_NAME=app BASE_URL=http://localhost:3000</code></li>
-        <li><code>make e2e-copy-report</code></li>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      From root folder:<br>
-      <ul style="list-style-position:inside; text-align:left;">
-        <li><code>make e2e-run APP_NAME=app BASE_URL=http://host.docker.internal:3000</code></li>
-        <br />
-        <em>* BASE_URL cannot use localhost</em>
-      </ul>
-    </td>
-    <td style="vertical-align:top;">
-      <em>* uses make commands <br /><br /> see the relevant <a href="../../.github/workflows/e2e-tests.yml">e2e Github Actions workflow file</a>
-    </em>
-    </td>
-  </tr>
+### Viewing the Report
+To copy the report from the container to your local machine for viewing
+```bash
+make e2e-copy-report
+```
 
-  <tr>
-    <td style="vertical-align:top;">Show Report</td>
-    <td colspan="2" style="vertical-align:top;">From the root: <br /><code>make e2e-show-report</code></td>
-    <td style="vertical-align:top;">View Artifacts of Github Actions job</td>
-  </tr>
-</table>
+Once the report is in your local `./e2e` folder,  you can run:
 
-- Running local with Docker is the preferred approach
-    - When running locally with Docker, the `playwright-report` will be copied to your local `./e2e/` folder
-- For all local runs, your application needs to be running
+```bash
+make e2e-show-report
+```
+
+*On CI, the report shows up in the Github Actions artifacts tab
 
 
 ### PR Environments
