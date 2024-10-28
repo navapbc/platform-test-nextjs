@@ -12,7 +12,7 @@ on:
 
 jobs:
   e2e:
-    name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
+    name: E2E Tests - Shard ${{ matrix.shard }} of ${{ matrix.total_shards }}
     runs-on: ubuntu-latest
 
     strategy:
@@ -41,5 +41,5 @@ jobs:
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-shard-${{ matrix.shard }}
           path: ./e2e/playwright-report
