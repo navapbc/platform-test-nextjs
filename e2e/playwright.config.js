@@ -21,7 +21,7 @@ export default defineConfig({
   // Opt out of parallel tests on CI.
   workers: process.env.CI ? 1 : undefined,
   // Use 'blob' for CI to allow merging of reports. See https://playwright.dev/docs/test-reporters
-  reporter: process.env.CI ? [['blob', { outputFolder: 'blob-report' }]] : 'html',
+  reporter: process.env.CI ? 'blob' : 'html',
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions.
   use: {
     // Base URL to use in actions like `await page.goto('/')`.

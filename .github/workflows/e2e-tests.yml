@@ -49,27 +49,28 @@ jobs:
   create-report:
     name: Create Merged Test Report
     if: always()
-    needs: e2e
+    needs: [e2e]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
 
-      - name: Download Blob Reports
-        uses: actions/download-artifact@v4
-        with:
-          name: all-blob-reports-shard-*
-          path: all-blob-reports
+    - name: Install dependencies
+      run: npm ci
 
-      - name: Merge Blob Reports into HTML
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
+    - name: Download All Blob Reports
+      uses: actions/download-artifact@v4
+      with:
+        name: all-blob-reports-shard-*
+        path: all-blob-reports
 
-      - name: Upload Merged HTML Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: merged-html-report
-          path: all-blob-reports/playwright-report
-          retention-days: 7
+    - name: Merge Blob Reports into HTML
+      run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+    - name: Upload Merged HTML Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: merged-html-report
+        path: all-blob-reports/playwright-report
+        retention-days: 7
