@@ -7,14 +7,15 @@ RUN apt-get update && apt-get install -y make
 # Set the working directory to the root of the project inside the Docker container
 WORKDIR /
 
-# Copy the required files and directories from the root of the project into the Docker container
+# Setup npm install layer that can be cached
 COPY Makefile /Makefile
-COPY e2e /e2e
-
-# Run the Makefile target to set up end-to-end tests for CI
+COPY e2e/package.json e2e/package-lock.json /e2e/
 RUN make e2e-setup-ci
 
-# Change the working directory back to the root to run the Makefile
+# Copy entire e2e folder over
+COPY e2e /e2e
+
+# Change the working directory back to the root to run Makefile commands
 WORKDIR /
 
 # Default command when running the container
