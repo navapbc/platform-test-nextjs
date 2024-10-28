@@ -56,12 +56,9 @@ make e2e-test APP_NAME=app BASE_URL=http://localhost:3000
 
 
 ### Viewing the Report
-To copy the report from the container to your local machine for viewing
-```bash
-make e2e-copy-report
-```
+If running in docker, the report will be copied from the container to your local `./e2e/playwright-report` folder. If running natively, the report will also appear in this same folder.
 
-Once the report is in your local `./e2e` folder,  you can run:
+To quickly view the report, you can run:
 
 ```bash
 make e2e-show-report
@@ -70,7 +67,7 @@ make e2e-show-report
 *On CI, the report shows up in the Github Actions artifacts tab
 
 
-### PR Environments
+### PR Preview Environments
 
 The E2E tests are triggered in PR preview environments on each PR update. For more information on how PR environments work, please refer to [PR Environments Documentation](../infra/pull-request-environments.md).
 
