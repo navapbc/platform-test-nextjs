@@ -34,8 +34,9 @@ jobs:
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         env:
-            TOTAL_SHARDS: ${{ matrix.total_shards }}
-            CURRENT_SHARD: ${{ matrix.shard }}
+          CI: true  # Ensure CI environment variable is set
+          TOTAL_SHARDS: ${{ matrix.total_shards }}
+          CURRENT_SHARD: ${{ matrix.shard }}
         run: make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
 
       - name: Verify Blob Report Directory
