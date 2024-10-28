@@ -38,8 +38,33 @@ jobs:
             CURRENT_SHARD: ${{ matrix.shard }}
         run: make e2e-test APP_NAME=${{ inputs.app_name }} BASE_URL=${{ inputs.service_endpoint }}
 
-      - name: Upload Playwright report
+      - name: Upload Blob Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-shard-${{ matrix.shard }}
-          path: ./e2e/playwright-report
+          name: all-blob-reports
+          path: blob-report
+          retention-days: 1
+
+  create-report:
+    name: Create Merged Test Report
+    if: always()
+    needs: e2e
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Blob Reports
+        uses: actions/download-artifact@v4
+        with:
+          name: all-blob-reports
+          path: all-blob-reports
+
+      - name: Merge Blob Reports into HTML
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Upload Merged HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-html-report
+          path: all-blob-reports/playwright-report
+          retention-days: 7
