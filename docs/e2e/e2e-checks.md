@@ -64,6 +64,12 @@ To quickly view the report, you can run:
 make e2e-show-report
 ```
 
+To clean the report folder you can run:
+
+```bash
+make e2e-clean-report
+```
+
 *On CI, the report shows up in the Github Actions artifacts tab
 
 
