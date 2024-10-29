@@ -27,7 +27,7 @@ Some highlights:
 
 ## Run tests locally
 
-### Running tests with docker (preferred)
+### Run tests with docker (preferred)
 
 First, make sure the application you want to test is running.
 
