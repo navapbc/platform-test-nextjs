@@ -29,12 +29,12 @@ __check_defined = \
 .PHONY : \
 	e2e-build \
 	e2e-clean-report \
-	e2e-copy-report \
 	e2e-delete-image \
-	e2e-run \
+	e2e-setup-ci \
 	e2e-setup-native \
 	e2e-show-report \
 	e2e-test \
+	e2e-test-native
 	help \
 	infra-check-app-database-roles \
 	infra-check-compliance-checkov \
@@ -235,17 +235,14 @@ release-image-tag: ## Prints the image tag of the release image
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
 	docker build -t playwright-e2e -f ./e2e/Dockerfile .
 
-e2e-copy-report: ## Copy the Playwright report from the container to local
-	docker cp playwright-e2e-container:/e2e/playwright-report ./e2e/playwright-report
-
 e2e-clean-report: ## Remove the local ./e2e/playwright-report folder and its contents
 	rm -rf ./e2e/playwright-report
 
 e2e-delete-image: ## Delete the Docker image for e2e tests
 	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
 
-e2e-run: ## Run the Playwright tests in a Docker container and copy the report locally
-e2e-run: e2e-build
+e2e-test: ## Run E2E Playwright tests in a Docker container and copy the report locally
+e2e-test: e2e-build
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	docker run --rm \
@@ -266,7 +263,7 @@ e2e-setup-ci: ## Setup end-to-end tests for CI
 e2e-show-report: ## Show the ./e2e/playwright-report
 	@cd e2e && npx playwright show-report
 
-e2e-test: ## Run end-to-end tests
+e2e-test-native: ## Run end-to-end tests
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	@cd e2e/$(APP_NAME) && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npx playwright test $(E2E_ARGS)

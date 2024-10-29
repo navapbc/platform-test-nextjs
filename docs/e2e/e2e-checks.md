@@ -25,21 +25,21 @@ Some highlights:
 - HTML reports are output to the `playwright-report` folder
 - Accessibility testing can be performed using the `@axe-core/playwright` package (https://playwright.dev/docs/accessibility-testing)
 
-## Running Tests Locally
+## Run tests locally
 
-### Running Tests with Docker (preferred)
+### Running tests with docker (preferred)
 
 First, make sure the application you want to test is running.
 
 Then, run end-to-end tests using Docker with:
 ```bash
-make e2e-run APP_NAME=app BASE_URL=http://host.docker.internal:3000
+make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000
 ```
 
 *Note that `BASE_URL` cannot be `localhost`
 
 
-### Running tests Natively
+### Run tests natively
 
 First, make sure the application you want to test is running.
 
@@ -51,11 +51,11 @@ make e2e-setup-native
 
 Then, run the tests with your app name and base url:
 ```bash
-make e2e-test APP_NAME=app BASE_URL=http://localhost:3000
+make e2e-test-native APP_NAME=app BASE_URL=http://localhost:3000
 ```
 
 
-### Viewing the Report
+### Viewing the report
 If running in docker, the report will be copied from the container to your local `./e2e/playwright-report` folder. If running natively, the report will also appear in this same folder.
 
 To quickly view the report, you can run:
@@ -73,7 +73,7 @@ make e2e-clean-report
 *On CI, the report shows up in the Github Actions artifacts tab
 
 
-### PR Preview Environments
+### PR preview environments
 
 The E2E tests are triggered in PR preview environments on each PR update. For more information on how PR environments work, please refer to [PR Environments Documentation](../infra/pull-request-environments.md).
 
