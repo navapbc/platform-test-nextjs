@@ -1,4 +1,4 @@
-name: CI App PR Environment Checks
+name: CI app PR Environment Checks
 on:
   workflow_dispatch:
     inputs:
