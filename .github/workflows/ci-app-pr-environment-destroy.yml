@@ -1,4 +1,4 @@
-name: CI App PR Environment Destroy
+name: CI app PR Environment Destroy
 on:
   workflow_dispatch:
     inputs:
