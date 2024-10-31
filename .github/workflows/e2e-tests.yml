@@ -41,9 +41,6 @@ jobs:
             CURRENT_SHARD=${{ matrix.shard }} \
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
-      - name: Copy Blob Report from Docker Container
-        run: docker cp playwright-e2e-container:/e2e/blob-report ./e2e/blob-report
-
       - name: Verify Blob Report Directory
         run: |
           echo "Contents of blob-report directory on host:"

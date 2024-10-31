@@ -107,6 +107,8 @@ e2e-test: e2e-build
 		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
 		-v $(PWD)/e2e/blob-report:/e2e/blob-report \
 		playwright-e2e
+	docker cp playwright-e2e-container:/e2e/blob-report ./e2e/blob-report
+
 
 e2e-test-native: ## Run end-to-end tests
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
