@@ -41,6 +41,9 @@ jobs:
             CURRENT_SHARD=${{ matrix.shard }} \
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
+      - name: Print all environment variables
+        run: printenv
+
       - name: Verify Blob Report Directory
         run: |
           mkdir -p blob-report
