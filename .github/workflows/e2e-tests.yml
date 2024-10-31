@@ -46,7 +46,7 @@ jobs:
 
       - name: Make Blob Report Directory
         run: |
-          mkdir -p blob-report
+          mkdir -p ./e2e/blob-report
           echo "Contents of blob-report directory:"
           ls -R blob-report || echo "blob-report directory not found"
 
@@ -55,14 +55,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: all-blob-reports-shard-${{ matrix.shard }}
-          path: blob-report
+          path: ./e2e/blob-report
           retention-days: 1
 
 
       - name: View Contents of Blob Report Directory After Uploading
         run: |
             echo "Contents of blob-report directory:"
-            ls -R blob-report || echo "blob-report directory not found"
+            ls -R ./e2e/blob-report || echo "blob-report directory not found"
 
 
   create-report:
