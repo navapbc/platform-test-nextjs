@@ -102,6 +102,8 @@ e2e-test: e2e-build
 		--name playwright-e2e-container \
 		-e APP_NAME=$(APP_NAME) \
 		-e BASE_URL=$(BASE_URL) \
+		-e CURRENT_SHARD=$(CURRENT_SHARD) \
+		-e TOTAL_SHARDS=$(TOTAL_SHARDS) \
 		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
 		playwright-e2e
 
