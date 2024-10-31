@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir -p ./e2e/blob-report
           echo "Contents of blob-report directory:"
-          ls -R blob-report || echo "blob-report directory not found"
+          ls -R ./e2e/blob-report || echo "blob-report directory not found"
 
       - name: Upload Blob Report
         if: always()
