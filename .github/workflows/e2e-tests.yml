@@ -41,13 +41,12 @@ jobs:
             CURRENT_SHARD=${{ matrix.shard }} \
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
-      - name: Print all environment variables
-        run: printenv
+      - name: Copy Blob Report from Docker Container
+        run: docker cp playwright-e2e-container:/e2e/blob-report ./e2e/blob-report
 
-      - name: Make Blob Report Directory
+      - name: Verify Blob Report Directory
         run: |
-          mkdir -p ./e2e/blob-report
-          echo "Contents of blob-report directory:"
+          echo "Contents of blob-report directory on host:"
           ls -R ./e2e/blob-report || echo "blob-report directory not found"
 
       - name: Upload Blob Report
@@ -57,13 +56,6 @@ jobs:
           name: all-blob-reports-shard-${{ matrix.shard }}
           path: ./e2e/blob-report
           retention-days: 1
-
-
-      - name: View Contents of Blob Report Directory After Uploading
-        run: |
-            echo "Contents of blob-report directory:"
-            ls -R ./e2e/blob-report || echo "blob-report directory not found"
-
 
   create-report:
     name: Create Merged Test Report
