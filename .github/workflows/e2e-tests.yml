@@ -43,6 +43,7 @@ jobs:
 
       - name: Verify Blob Report Directory
         run: |
+          mkdir -p blob-report
           echo "Contents of blob-report directory:"
           ls -R blob-report || echo "blob-report directory not found"
 
@@ -56,29 +57,33 @@ jobs:
 
   create-report:
     name: Create Merged Test Report
-    if: always()
     needs: [e2e]
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Download All Blob Reports
+      - name: Install dependencies in ./e2e
+        run: make e2e-setup-ci
+
+      - name: Download Blob Reports from Artifacts
         uses: actions/download-artifact@v4
         with:
           name: all-blob-reports-shard-*
-          path: all-blob-reports
+          path: ./e2e/all-blob-reports
 
       - name: Merge Blob Reports into HTML
         run: npx playwright merge-reports --reporter html ./all-blob-reports
+        working-directory: ./e2e
 
       - name: Upload Merged HTML Report
         uses: actions/upload-artifact@v4
         with:
           name: merged-html-report
-          path: all-blob-reports/playwright-report
+          path: ./e2e/playwright-report
           retention-days: 7
