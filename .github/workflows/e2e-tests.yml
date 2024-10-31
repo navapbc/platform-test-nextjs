@@ -44,7 +44,7 @@ jobs:
       - name: Print all environment variables
         run: printenv
 
-      - name: Verify Blob Report Directory
+      - name: Make Blob Report Directory
         run: |
           mkdir -p blob-report
           echo "Contents of blob-report directory:"
@@ -57,6 +57,13 @@ jobs:
           name: all-blob-reports-shard-${{ matrix.shard }}
           path: blob-report
           retention-days: 1
+
+
+      - name: View Contents of Blob Report Directory After Uploading
+        run: |
+            echo "Contents of blob-report directory:"
+            ls -R blob-report || echo "blob-report directory not found"
+
 
   create-report:
     name: Create Merged Test Report
