@@ -15,12 +15,11 @@ RUN make e2e-setup-ci
 # Copy entire e2e folder over
 COPY e2e /e2e
 
-# Change the working directory back to the root to run Makefile commands
-WORKDIR /
-
+# Copy the run-e2e-container-test script to the /e2e directory in the container
 COPY e2e/run-e2e-container-test /e2e/run-e2e-container-test
 
-RUN chmod +x /run-e2e-container-test
+# Make sure the script is executable
+RUN chmod +x /e2e/run-e2e-container-test
 
 # Default command when running the container
 CMD ["/e2e/run-e2e-container-test"]
