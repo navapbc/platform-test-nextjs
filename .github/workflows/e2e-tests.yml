@@ -51,9 +51,6 @@ jobs:
             CURRENT_SHARD=${{ matrix.shard }} \
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
-      - name: Check blob-report contents inside container
-        run: ./e2e/blob-report
-
       - name: Verify Blob Report Directory 2
         run: |
           echo "Contents of blob-report directory on host:"
