@@ -10,6 +10,10 @@ WORKDIR /
 # Setup npm install layer that can be cached
 COPY Makefile /Makefile
 COPY e2e/package.json e2e/package-lock.json /e2e/
+COPY run-e2e-container-test /run-e2e-container-test
+
+RUN chmod +x /run-e2e-container-test
+
 RUN make e2e-setup-ci
 
 # Copy entire e2e folder over
