@@ -33,10 +33,10 @@ jobs:
       - name: Install Playwright browsers
         run: make e2e-setup-ci
 
-      - name: Ensure permissions for blob-report directory
-        run: |
-          mkdir -p ./e2e/blob-report
-          chmod -R 777 ./e2e/blob-report
+    #   - name: Ensure permissions for blob-report directory
+    #     run: |
+    #       mkdir -p ./e2e/blob-report
+    #       chmod -R 777 ./e2e/blob-report
 
       - name: Verify Blob Report Directory
         run: |
@@ -52,7 +52,7 @@ jobs:
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
       - name: Check blob-report contents inside container
-        run: docker exec playwright-e2e-container ls -la /e2e/blob-report
+        run: ./e2e/blob-report
 
       - name: Verify Blob Report Directory 2
         run: |
