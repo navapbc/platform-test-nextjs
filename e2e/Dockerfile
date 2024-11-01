@@ -10,17 +10,17 @@ WORKDIR /
 # Setup npm install layer that can be cached
 COPY Makefile /Makefile
 COPY e2e/package.json e2e/package-lock.json /e2e/
-COPY run-e2e-container-test /run-e2e-container-test
-
-RUN chmod +x /run-e2e-container-test
 
 RUN make e2e-setup-ci
-
 # Copy entire e2e folder over
 COPY e2e /e2e
 
 # Change the working directory back to the root to run Makefile commands
 WORKDIR /
 
+COPY e2e/run-e2e-container-test /e2e/run-e2e-container-test
+
+RUN chmod +x /run-e2e-container-test
+
 # Default command when running the container
-CMD ["run-e2e-container-test"]
+CMD ["/e2e/run-e2e-container-test"]
