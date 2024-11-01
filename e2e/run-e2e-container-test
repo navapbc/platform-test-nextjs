@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Run the e2e tests
+make e2e-test-native
+
+# Define the path to the blob-report directory
+BLOB_REPORT_PATH="/e2e/blob-report"
+
+# Set a timeout in seconds (e.g., 30 seconds)
+TIMEOUT=30
+WAIT_INTERVAL=2  # Interval between checks, in seconds
+
+echo "Waiting for blob-report directory to be created..."
+
+# Start a timer
+SECONDS=0
+
+# Loop until the directory exists or timeout is reached
+while [[ ! -d "$BLOB_REPORT_PATH" ]]; do
+  if [[ $SECONDS -ge $TIMEOUT ]]; then
+    echo "Timeout reached. blob-report directory not found."
+    exit 1
+  fi
+  sleep $WAIT_INTERVAL
+done
+
+echo "blob-report directory has been created."

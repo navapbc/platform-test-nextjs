@@ -19,4 +19,4 @@ COPY e2e /e2e
 WORKDIR /
 
 # Default command when running the container
-CMD ["make", "e2e-test-native"]
+CMD ["run-e2e-container-test"]
