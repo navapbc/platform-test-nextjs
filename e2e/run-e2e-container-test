@@ -10,18 +10,22 @@ BLOB_REPORT_PATH="/e2e/blob-report"
 TIMEOUT=30
 WAIT_INTERVAL=2  # Interval between checks, in seconds
 
-echo "Waiting for blob-report directory to be created..."
+echo "Waiting for files to be created in the blob-report directory..."
 
 # Start a timer
 SECONDS=0
 
-# Loop until the directory exists or timeout is reached
-while [[ ! -d "$BLOB_REPORT_PATH" ]]; do
+# Loop until the directory exists and contains files or timeout is reached
+while [[ ! -d "$BLOB_REPORT_PATH" || -z "$(ls -A "$BLOB_REPORT_PATH")" ]]; do
   if [[ $SECONDS -ge $TIMEOUT ]]; then
-    echo "Timeout reached. blob-report directory not found."
+    echo "Timeout reached. No files found in blob-report directory."
     exit 1
   fi
   sleep $WAIT_INTERVAL
 done
 
-echo "blob-report directory has been created."
+echo "Files detected in the blob-report directory."
+
+# List the contents of the blob-report directory
+echo "Contents of $BLOB_REPORT_PATH:"
+ls -la "$BLOB_REPORT_PATH"
