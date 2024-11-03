@@ -51,6 +51,11 @@ jobs:
             CURRENT_SHARD=${{ matrix.shard }} \
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
+      - name: Output Docker Container Logs
+        if: failure()
+        run: |
+              docker logs playwright-e2e-container
+
       - name: Verify Blob Report Directory 2
         run: |
           echo "Contents of blob-report directory on host:"
