@@ -35,8 +35,8 @@ jobs:
 
       - name: Ensure permissions for blob-report directory
         run: |
-          mkdir -p ./e2e/blob-report
-          chmod -R 777 ./e2e/blob-report
+          sudo mkdir -p ./e2e/blob-report
+          sudo chmod -R 777 ./e2e/blob-report
 
       - name: Verify Blob Report Directory
         run: |

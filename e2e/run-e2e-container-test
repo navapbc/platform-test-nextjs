@@ -15,6 +15,9 @@ echo "Waiting for files to be created in the blob-report directory..."
 # Start a timer
 SECONDS=0
 
+echo "Contents of $BLOB_REPORT_PATH before:"
+ls -la "$BLOB_REPORT_PATH"
+
 # Loop until the directory exists and contains files or timeout is reached
 while [[ ! -d "$BLOB_REPORT_PATH" || -z "$(ls -A "$BLOB_REPORT_PATH")" ]]; do
   if [[ $SECONDS -ge $TIMEOUT ]]; then
@@ -27,7 +30,7 @@ done
 echo "Files detected in the blob-report directory."
 
 # List the contents of the blob-report directory
-echo "Contents of $BLOB_REPORT_PATH:"
+echo "Contents of $BLOB_REPORT_PATH after:"
 ls -la "$BLOB_REPORT_PATH"
 
 echo "contents of playwright-report"
