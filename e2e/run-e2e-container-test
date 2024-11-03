@@ -7,7 +7,7 @@ make e2e-test-native
 BLOB_REPORT_PATH="/e2e/blob-report"
 
 # Set a timeout in seconds (e.g., 30 seconds)
-TIMEOUT=30
+TIMEOUT=120
 WAIT_INTERVAL=2  # Interval between checks, in seconds
 
 echo "Waiting for files to be created in the blob-report directory..."
