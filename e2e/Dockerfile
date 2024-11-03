@@ -11,7 +11,9 @@ WORKDIR /
 COPY Makefile /Makefile
 COPY e2e/package.json e2e/package-lock.json /e2e/
 
+# install deps
 RUN make e2e-setup-ci
+
 # Copy entire e2e folder over
 COPY e2e /e2e
 
@@ -20,6 +22,9 @@ COPY e2e/run-e2e-container-test /e2e/run-e2e-container-test
 
 # Make sure the script is executable
 RUN chmod +x /e2e/run-e2e-container-test
+
+# create the blob-report folder and grant it permissions
+RUN mkdir -p /e2e/blob-report && chmod -R 777 /e2e/blob-report
 
 # Default command when running the container
 CMD ["/e2e/run-e2e-container-test"]
