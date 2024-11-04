@@ -12,43 +12,43 @@ on:
         type: string
 
 jobs:
-  install:
-    name: Install Dependencies
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#   install:
+#     name: Install Dependencies
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 20
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: lts/*
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: |
-            node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+#       - name: Cache node_modules
+#         uses: actions/cache@v3
+#         id: cache-node-modules
+#         with:
+#           path: |
+#             node_modules
+#           key: modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Cache Playwright binaries
-        uses: actions/cache@v3
-        id: cache-playwright
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: playwright-${{ hashFiles('package-lock.json') }}
+#       - name: Cache Playwright binaries
+#         uses: actions/cache@v3
+#         id: cache-playwright
+#         with:
+#           path: |
+#             ~/.cache/ms-playwright
+#           key: playwright-${{ hashFiles('package-lock.json') }}
 
-      - name: Install Playwright Browsers
-        if: steps.cache-playwright.outputs.cache-hit != 'true'
-        run: make e2e-setup-ci
+#       - name: Install Playwright Browsers
+#         if: steps.cache-playwright.outputs.cache-hit != 'true'
+#         run: make e2e-setup-ci
 
   e2e:
     name: E2E Tests - Shard ${{ matrix.shard }} of ${{ matrix.total_shards }}
     runs-on: ubuntu-latest
-    needs: install
+    # needs: install
 
     strategy:
         matrix:
@@ -64,19 +64,19 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Restore node_modules from cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+    #   - name: Restore node_modules from cache
+    #     uses: actions/cache@v3
+    #     with:
+    #       path: |
+    #         node_modules
+    #       key: modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Restore Playwright binaries from cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/ms-playwright
-          key: playwright-${{ hashFiles('package-lock.json') }}
+    #   - name: Restore Playwright binaries from cache
+    #     uses: actions/cache@v3
+    #     with:
+    #       path: |
+    #         ~/.cache/ms-playwright
+    #       key: playwright-${{ hashFiles('package-lock.json') }}
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
