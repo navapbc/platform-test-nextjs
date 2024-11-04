@@ -105,6 +105,7 @@ e2e-test: e2e-build
 		-e BASE_URL=$(BASE_URL) \
 		-e CURRENT_SHARD=$(CURRENT_SHARD) \
 		-e TOTAL_SHARDS=$(TOTAL_SHARDS) \
+		-e CI=$(CI) \
 		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
 		-v $(PWD)/e2e/blob-report:/e2e/blob-report \
 		playwright-e2e
