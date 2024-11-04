@@ -1,11 +1,7 @@
 #!/bin/bash
 
-echo "CI => ${CI}"
-
 # Run the e2e tests
-make e2e-test-native E2E_ARGS="--reporter=blob"
-
-
+make e2e-test-native"
 
 # Define the path to the blob-report directory
 BLOB_REPORT_PATH="/e2e/blob-report"
