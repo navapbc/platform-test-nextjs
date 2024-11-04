@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run the e2e tests
-make e2e-test-native"
+make e2e-test-native
 
 # Define the path to the blob-report directory
 BLOB_REPORT_PATH="/e2e/blob-report"
