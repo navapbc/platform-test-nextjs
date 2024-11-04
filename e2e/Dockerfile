@@ -17,17 +17,7 @@ RUN make e2e-setup-ci
 # Copy entire e2e folder over
 COPY e2e /e2e
 
-# Copy the run-e2e-container-test script to the /e2e directory in the container
-# COPY e2e/run-e2e-container-test /e2e/run-e2e-container-test
-
-# Make sure the script is executable
-# RUN chmod +x /e2e/run-e2e-container-test
-
-# create the blob-report folder and grant it permissions
-RUN mkdir -p /e2e/blob-report && chmod -R 777 /e2e/blob-report
-
+# Set CI env to true to set playwright to output blob report
 ENV CI=true
 
-# Default command when running the container
-# CMD ["/e2e/run-e2e-container-test"]
 CMD ["make", "e2e-test-native"]
