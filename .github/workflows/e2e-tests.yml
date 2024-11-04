@@ -28,7 +28,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: lts/*
 
       - name: Install Playwright browsers
         run: make e2e-setup-ci
@@ -51,18 +51,13 @@ jobs:
             CURRENT_SHARD=${{ matrix.shard }} \
             TOTAL_SHARDS=${{ matrix.total_shards }}
 
-      - name: Output Docker Container Logs
-        if: failure()
-        run: |
-              docker logs playwright-e2e-container
-
       - name: Verify Blob Report Directory 2
         run: |
           echo "Contents of blob-report directory on host:"
           ls -R ./e2e/blob-report || echo "blob-report directory not found"
 
       - name: Upload Blob Report
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: all-blob-reports-shard-${{ matrix.shard }}
@@ -71,12 +66,9 @@ jobs:
 
   create-report:
     name: Create Merged Test Report
+    if: ${{ !cancelled() }}
     needs: [e2e]
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-          shard: [1, 2, 3]
-          total_shards: [3]
 
     steps:
       - name: Checkout code
@@ -85,24 +77,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-            node-version: '20'
+            node-version: lts/*
 
       - name: Install dependencies in ./e2e
         run: make e2e-setup-ci
 
-    #   - name: Download Blob Report for Shard ${{ matrix.shard }}
-    #     uses: actions/download-artifact@v4
-    #     with:
-    #         name: all-blob-reports-shard-${{ matrix.shard }}
-    #         path: ./e2e/all-blob-reports/shard-${{ matrix.shard }}
-
-      - name: Upload Blob Report for Shard ${{ matrix.shard }}
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
         with:
-          name: all-blob-reports-shard-${{ matrix.shard }}
-          path: ./e2e/blob-report
-          retention-days: 1
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
 
       - name: Upload Merged HTML Report
         uses: actions/upload-artifact@v4
