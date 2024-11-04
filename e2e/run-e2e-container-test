@@ -1,7 +1,15 @@
 #!/bin/bash
 
+
+# Print the environment variables to confirm
+echo "Running tests with APP_NAME=${APP_NAME} and BASE_URL=${BASE_URL}"
+
+echo "CI => ${CI}"
+
 # Run the e2e tests
 make e2e-test-native E2E_ARGS="--reporter=blob"
+
+
 
 # Define the path to the blob-report directory
 BLOB_REPORT_PATH="/e2e/blob-report"
