@@ -17,7 +17,4 @@ RUN make e2e-setup-ci
 # Copy entire e2e folder over
 COPY e2e /e2e
 
-# Set CI env to true to set playwright to output blob report
-ENV CI=true
-
 CMD ["make", "e2e-test-native"]
