@@ -97,16 +97,10 @@ jobs:
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
-
       - name: Verify Merged Report
         run: |
-          echo "Contents of ./all-blob-reports after merge:"
-          ls -R ./all-blob-reports
-          echo "Contents of ./e2e/playwright-report after merge:"
-          ls -R ./e2e/playwright-report || echo "No report found in ./e2e/playwright-report"
           echo "Contents of ./playwright-report after merge:"
           ls -R ./playwright-report || echo "No report found in ./playwright-report"
-
 
       - name: Upload Merged HTML Report
         uses: actions/upload-artifact@v4
