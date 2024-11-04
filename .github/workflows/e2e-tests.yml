@@ -73,6 +73,11 @@ jobs:
     name: Create Merged Test Report
     needs: [e2e]
     runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          shard: [1, 2, 3]
+          total_shards: [3]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -80,24 +85,28 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+            node-version: '20'
 
       - name: Install dependencies in ./e2e
         run: make e2e-setup-ci
 
-      - name: Download Blob Reports from Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: all-blob-reports-shard-*
-          path: ./e2e/all-blob-reports
+    #   - name: Download Blob Report for Shard ${{ matrix.shard }}
+    #     uses: actions/download-artifact@v4
+    #     with:
+    #         name: all-blob-reports-shard-${{ matrix.shard }}
+    #         path: ./e2e/all-blob-reports/shard-${{ matrix.shard }}
 
-      - name: Merge Blob Reports into HTML
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
-        working-directory: ./e2e
+      - name: Upload Blob Report for Shard ${{ matrix.shard }}
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-blob-reports-shard-${{ matrix.shard }}
+          path: ./e2e/blob-report
+          retention-days: 1
 
       - name: Upload Merged HTML Report
         uses: actions/upload-artifact@v4
         with:
-          name: merged-html-report
-          path: ./e2e/playwright-report
-          retention-days: 7
+            name: merged-html-report
+            path: ./e2e/playwright-report
+            retention-days: 7
