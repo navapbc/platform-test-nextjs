@@ -26,5 +26,7 @@ RUN chmod +x /e2e/run-e2e-container-test
 # create the blob-report folder and grant it permissions
 RUN mkdir -p /e2e/blob-report && chmod -R 777 /e2e/blob-report
 
+ENV CI=true
+
 # Default command when running the container
 CMD ["/e2e/run-e2e-container-test"]
