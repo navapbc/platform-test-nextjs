@@ -1,9 +1,5 @@
 #!/bin/bash
 
-
-# Print the environment variables to confirm
-echo "Running tests with APP_NAME=${APP_NAME} and BASE_URL=${BASE_URL}"
-
 echo "CI => ${CI}"
 
 # Run the e2e tests
