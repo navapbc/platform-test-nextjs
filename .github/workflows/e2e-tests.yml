@@ -95,19 +95,22 @@ jobs:
           ls -R all-blob-reports
 
       - name: Merge into HTML Report
-        run: npx playwright merge-reports --reporter html --output ./e2e/playwright-report ./all-blob-reports
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
 
-    #   - name: Merge into HTML Report
-    #     run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Verify Merged Report
         run: |
-            echo "Checking contents of ./e2e/playwright-report"
-            ls -R ./e2e/playwright-report || echo "No report found in ./e2e/playwright-report"
+          echo "Contents of ./all-blob-reports after merge:"
+          ls -R ./all-blob-reports
+          echo "Contents of ./e2e/playwright-report after merge:"
+          ls -R ./e2e/playwright-report || echo "No report found in ./e2e/playwright-report"
+          echo "Contents of ./playwright-report after merge:"
+          ls -R ./playwright-report || echo "No report found in ./playwright-report"
+
 
       - name: Upload Merged HTML Report
         uses: actions/upload-artifact@v4
         with:
             name: merged-html-report
-            path: ./e2e/playwright-report
+            path: ./playwright-report
             retention-days: 7
