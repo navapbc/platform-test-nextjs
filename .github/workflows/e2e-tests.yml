@@ -44,7 +44,7 @@ jobs:
           echo "Contents of blob-report directory on host:"
           ls -R ./e2e/blob-report || echo "blob-report directory not found"
 
-      - name: Upload Blob Report
+      - name: Upload blob report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
@@ -53,7 +53,7 @@ jobs:
           retention-days: 1
 
   create-report:
-    name: Create Merged Test Report
+    name: Create merged test report
     if: ${{ !cancelled() }}
     needs: [e2e]
     runs-on: ubuntu-latest
