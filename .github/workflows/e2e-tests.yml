@@ -55,7 +55,7 @@ jobs:
   create-report:
     name: Create Merged Test Report
     if: ${{ !cancelled() }}
-    needs: [e2e]
+    needs: e2e
     runs-on: ubuntu-latest
 
     steps:
