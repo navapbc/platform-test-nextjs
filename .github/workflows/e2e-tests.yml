@@ -67,7 +67,7 @@ jobs:
         with:
             node-version: lts/*
 
-      - name: Install dependencies in ./e2e
+      - name: Install dependencies in ./e2e to be able to run `playwright merge-reports`
         run: make e2e-setup-ci
 
       - name: Download blob reports from GitHub Actions Artifacts
@@ -77,20 +77,20 @@ jobs:
           pattern: blob-report-shard-*
           merge-multiple: true
 
-      - name: Verify Downloaded Artifacts
+      - name: Verify downloaded artifacts
         run: |
           echo "Contents of all-blob-reports after download:"
           ls -R all-blob-reports
 
-      - name: Merge into HTML Report
+      - name: Merge into HTML report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
-      - name: Verify Merged Report
+      - name: Verify merged report
         run: |
           echo "Contents of ./playwright-report after merge:"
           ls -R ./playwright-report || echo "No report found in ./playwright-report"
 
-      - name: Upload Merged HTML Report
+      - name: Upload merged HTML report
         uses: actions/upload-artifact@v4
         with:
             name: merged-html-report
