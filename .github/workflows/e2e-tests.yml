@@ -45,7 +45,6 @@ jobs:
           ls -R ./e2e/blob-report || echo "blob-report directory not found"
 
       - name: Upload blob report
-        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: blob-report-shard-${{ matrix.shard }}
