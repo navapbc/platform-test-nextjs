@@ -48,7 +48,7 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: all-blob-reports-shard-${{ matrix.shard }}
+          name: blob-report-shard-${{ matrix.shard }}
           path: ./e2e/blob-report
           retention-days: 1
 
@@ -74,7 +74,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: all-blob-reports
-          pattern: all-blob-reports-shard-*
+          pattern: blob-report-shard-*
           merge-multiple: true
 
       - name: Verify Downloaded Artifacts
