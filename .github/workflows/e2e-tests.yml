@@ -18,9 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-        matrix:
-          shard: [1, 2, 3]
-          total_shards: [3] # Github Actions doesn't have a built-in method to get the length of an array
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+        total_shards: [3]
 
     steps:
       - name: Checkout code
@@ -33,6 +34,10 @@ jobs:
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
+          if [ "${{ matrix.shard }}" -eq "2" ]; then
+                echo "Forcing failure on shard 2"
+                false # This command will fail the job
+          else
           make e2e-test \
             APP_NAME=${{ inputs.app_name }} \
             BASE_URL=${{ inputs.service_endpoint }} \
@@ -53,6 +58,7 @@ jobs:
 
   create-report:
     name: Create merged test report
+    # Merge reports after e2e job, even if some shards have failed
     if: ${{ !cancelled() }}
     needs: e2e
     runs-on: ubuntu-latest
@@ -86,7 +92,7 @@ jobs:
 
       - name: Verify merged report
         run: |
-          echo "Contents of ./playwright-report after merge:"
+          echo "Contents of ./e2e/playwright-report after merge:"
           ls -R ./e2e/playwright-report || echo "No report found in ./e2e/playwright-report"
 
       - name: Upload merged HTML report
