@@ -12,7 +12,36 @@ on:
         type: string
 
 jobs:
+  setup:
+    name: Set up dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        with:
+          path: e2e/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: make e2e-setup-ci
+
+      - name: Save Docker cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/docker
+          key: docker-${{ hashFiles('Dockerfile') }}
+          restore-keys: |
+            docker-
   e2e:
     name: Run E2E tests (${{ matrix.shard }} of ${{ matrix.total_shards }})
     runs-on: ubuntu-latest
@@ -26,6 +55,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        with:
+          path: e2e/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -67,6 +104,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
             node-version: lts/*
+
+      - name: Cache Node.js dependencies
+        uses: actions/cache@v4
+        with:
+            path: e2e/node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
+            restore-keys: |
+                ${{ runner.os }}-node-
 
       - name: Install dependencies in ./e2e to be able to run `playwright merge-reports`
         run: make e2e-setup-ci
