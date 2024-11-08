@@ -72,7 +72,7 @@ jobs:
       - name: Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: all-blob-reports
+          path: ./e2e/blob-report
           pattern: blob-report-shard-*
           merge-multiple: true
 
@@ -81,8 +81,11 @@ jobs:
           echo "Contents of all-blob-reports after download:"
           ls -R all-blob-reports
 
-      - name: Merge into HTML report
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
+    #   - name: Merge into HTML report
+    #     run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Merge into HTML report using Makefile
+        run: make e2e-merge-reports REPORT_PATH=./e2e/blob-report
 
       - name: Verify merged report
         run: |
