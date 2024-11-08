@@ -34,16 +34,16 @@ jobs:
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
-          if [ "${{ matrix.shard }}" -eq "2" ]; then
+            if [ "${{ matrix.shard }}" -eq "2" ]; then
                 echo "Forcing failure on shard 2"
                 false # This command will fail the job
-          else
-          make e2e-test \
-            APP_NAME=${{ inputs.app_name }} \
-            BASE_URL=${{ inputs.service_endpoint }} \
-            CURRENT_SHARD=${{ matrix.shard }} \
-            TOTAL_SHARDS=${{ matrix.total_shards }}
-
+            else
+                make e2e-test \
+                APP_NAME=${{ inputs.app_name }} \
+                BASE_URL=${{ inputs.service_endpoint }} \
+                CURRENT_SHARD=${{ matrix.shard }} \
+                TOTAL_SHARDS=${{ matrix.total_shards }}
+            fi
       - name: Verify blob report directory after tests
         run: |
           echo "Contents of blob-report directory on host:"
