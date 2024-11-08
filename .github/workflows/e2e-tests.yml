@@ -87,11 +87,11 @@ jobs:
       - name: Verify merged report
         run: |
           echo "Contents of ./playwright-report after merge:"
-          ls -R ./playwright-report || echo "No report found in ./playwright-report"
+          ls -R ./e2e/playwright-report || echo "No report found in ./e2e/playwright-report"
 
       - name: Upload merged HTML report
         uses: actions/upload-artifact@v4
         with:
             name: merged-html-report
-            path: ./playwright-report
+            path: ./e2e/playwright-report
             retention-days: 7
