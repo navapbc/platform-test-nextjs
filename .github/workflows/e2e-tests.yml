@@ -43,7 +43,7 @@ jobs:
       - name: Build Docker image with GitHub Actions cache
         uses: docker/build-push-action@v5
         with:
-          context: ./e2e
+          context: .
           file: ./e2e/Dockerfile
           push: false
           tags: playwright-e2e:latest
