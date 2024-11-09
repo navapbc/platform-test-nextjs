@@ -50,12 +50,17 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Save Docker image as artifact for shards
+      - name: Save Docker image to tar file
+        run: |
+            docker save playwright-e2e:latest -o /home/runner/work/_temp/playwright-e2e.tar
+
+      - name: Upload Docker image artifact
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-e2e
-          path: /home/runner/work/_temp/_github_docker_layer_cache
-          retention-days: 1
+            name: playwright-e2e
+            path: /home/runner/work/_temp/playwright-e2e.tar
+            retention-days: 1
+
   e2e:
     name: Run E2E tests (${{ matrix.shard }} of ${{ matrix.total_shards }})
     runs-on: ubuntu-latest
