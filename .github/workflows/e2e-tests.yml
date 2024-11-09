@@ -19,29 +19,43 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v4
-        with:
-          path: e2e/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+            node-version: lts/*
 
-      - name: Install dependencies
-        run: make e2e-setup-ci
-
-      - name: Save Docker cache
+      - name: Cache Node.js dependencies
+        id: cache-node
         uses: actions/cache@v4
         with:
-          path: /home/runner/.cache/docker
-          key: docker-${{ hashFiles('Dockerfile') }}
-          restore-keys: |
-            docker-
+            path: e2e/node_modules
+            key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: make e2e-setup-ci
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image with GitHub Actions cache
+        uses: docker/build-push-action@v5
+        with:
+          context: ./e2e
+          file: ./e2e/Dockerfile
+          push: false
+          tags: playwright-e2e:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Save Docker image as artifact for shards
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-e2e
+          path: /home/runner/work/_temp/_github_docker_layer_cache
+          retention-days: 1
   e2e:
     name: Run E2E tests (${{ matrix.shard }} of ${{ matrix.total_shards }})
     runs-on: ubuntu-latest
@@ -56,6 +70,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
       - name: Cache Node.js dependencies
         uses: actions/cache@v4
         with:
@@ -64,18 +83,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Download Docker image from setup
+        uses: actions/download-artifact@v4
         with:
-          node-version: lts/*
+          name: playwright-e2e
+
+      - name: Load Docker image
+        run: docker load < /home/runner/work/_temp/_github_docker_layer_cache/playwright-e2e.tar
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
-            make e2e-test \
-            APP_NAME=${{ inputs.app_name }} \
-            BASE_URL=${{ inputs.service_endpoint }} \
-            CURRENT_SHARD=${{ matrix.shard }} \
-            TOTAL_SHARDS=${{ matrix.total_shards }}
+          docker run --rm \
+            -e APP_NAME=${{ inputs.app_name }} \
+            -e BASE_URL=${{ inputs.service_endpoint }} \
+            -e CURRENT_SHARD=${{ matrix.shard }} \
+            -e TOTAL_SHARDS=${{ matrix.total_shards }} \
+            -e CI=true \
+            -v ${{ github.workspace }}/e2e/playwright-report:/e2e/playwright-report \
+            -v ${{ github.workspace }}/e2e/blob-report:/e2e/blob-report \
+            playwright-e2e:latest
 
       - name: Verify blob report directory after tests
         run: |
@@ -106,6 +132,7 @@ jobs:
             node-version: lts/*
 
       - name: Cache Node.js dependencies
+        id: cache-node
         uses: actions/cache@v4
         with:
             path: e2e/node_modules
@@ -114,6 +141,7 @@ jobs:
                 ${{ runner.os }}-node-
 
       - name: Install dependencies in ./e2e to be able to run `playwright merge-reports`
+        if: steps.cache-node.outputs.cache-hit != 'true'
         run: make e2e-setup-ci
 
       - name: Download blob reports from GitHub Actions Artifacts
