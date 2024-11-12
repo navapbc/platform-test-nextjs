@@ -113,7 +113,7 @@ jobs:
           mv $(find . -name "playwright-e2e.tar") /home/runner/work/_temp/playwright-e2e.tar
 
       - name: Load Docker image
-        run: docker load < /home/runner/work/_temp/_github_docker_layer_cache/playwright-e2e.tar
+        run: docker load < /home/runner/work/_temp/playwright-e2e.tar
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
