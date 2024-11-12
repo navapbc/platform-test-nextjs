@@ -108,6 +108,10 @@ jobs:
         with:
           name: playwright-e2e
 
+      - name: Move downloaded artifact to expected location
+        run: |
+          mv $(find . -name "playwright-e2e.tar") /home/runner/work/_temp/playwright-e2e.tar
+
       - name: Load Docker image
         run: docker load < /home/runner/work/_temp/_github_docker_layer_cache/playwright-e2e.tar
 
