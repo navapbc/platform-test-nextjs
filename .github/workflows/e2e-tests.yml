@@ -53,7 +53,7 @@ jobs:
           file: ./e2e/Dockerfile
           # Whether to push to a Docker registry
           push: false
-          # Tag for the image buing build
+          # Tag for the image build
           tags: playwright-e2e:latest
           # Where to pull cache layers from - gha means it will pull from Github Actions cache
           cache-from: type=gha
