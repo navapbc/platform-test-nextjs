@@ -83,7 +83,7 @@ jobs:
       fail-fast: false
       matrix:
         shard: [1, 2, 3]
-        total_shards: [3]
+        total_shards: [3] # Github Actions doesn't have a built-in method to get the length of an array
 
     steps:
       - name: Checkout code
