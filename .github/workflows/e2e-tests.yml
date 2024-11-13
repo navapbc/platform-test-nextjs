@@ -116,15 +116,11 @@ jobs:
 
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
-          docker run --rm \
-            -e APP_NAME=${{ inputs.app_name }} \
-            -e BASE_URL=${{ inputs.service_endpoint }} \
-            -e CURRENT_SHARD=${{ matrix.shard }} \
-            -e TOTAL_SHARDS=${{ matrix.total_shards }} \
-            -e CI=true \
-            -v ${{ github.workspace }}/e2e/playwright-report:/e2e/playwright-report \
-            -v ${{ github.workspace }}/e2e/blob-report:/e2e/blob-report \
-            playwright-e2e:latest
+          make e2e-test \
+            APP_NAME=${{ inputs.app_name }} \
+            BASE_URL=${{ inputs.service_endpoint }} \
+            CURRENT_SHARD=${{ matrix.shard }} \
+            TOTAL_SHARDS=${{ matrix.total_shards }}
 
       - name: Verify blob report directory after tests
         run: |
