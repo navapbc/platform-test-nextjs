@@ -9,6 +9,7 @@ on:
         required: true
         type: string
   pull_request:
+
 jobs:
   update:
     name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
