@@ -58,7 +58,7 @@ make e2e-test-native APP_NAME=app BASE_URL=http://localhost:3000
 
 #### Running tests natively with shards
 
-The following will split the test runs in 3 different shards and create a merged report in the `./e2e/blob-report` . This is meant to mimic how the tests run sharded in CI.
+The following commands split test execution into 3 separate shards, with results consolidated into a merged report located in `./e2e/blob-report`. This setup emulates how the sharded tests run in CI.
 ```
 # ensure app is running on port 3000
 
@@ -66,9 +66,9 @@ make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000 TOTAL_SHARD
 make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000 TOTAL_SHARDS=3 CURRENT_SHARD=2 CI=true && \
 make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000 TOTAL_SHARDS=3 CURRENT_SHARD=3 CI=true
 
-make e2e-merge-reports REPORT_PATH=blob-report
-make e2e-show-report
-make e2e-clean-report
+make e2e-merge-reports REPORT_PATH=blob-report # merge the blob reports into html
+make e2e-show-report # open the html report in browser
+make e2e-clean-report # clean the report folders
 ```
 
 ### Viewing the report
