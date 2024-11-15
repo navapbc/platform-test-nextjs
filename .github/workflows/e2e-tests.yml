@@ -72,8 +72,6 @@ jobs:
         with:
             path: e2e/node_modules
             key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
-            restore-keys: |
-                ${{ runner.os }}-node-
 
       - name: Debug cache hit status
         run: |
