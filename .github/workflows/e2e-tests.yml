@@ -89,7 +89,7 @@ jobs:
           echo "Contents of ./e2e/blob-report after download:"
           ls -R ./e2e/blob-report
 
-      - name: Merge into HTML report using Makefile
+      - name: Merge reports
         run: make e2e-merge-reports REPORT_PATH=blob-report
 
       - name: Verify merged report
