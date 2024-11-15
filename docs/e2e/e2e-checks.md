@@ -4,6 +4,8 @@
 
 This repository uses [Playwright](https://playwright.dev/) to perform end-to-end (E2E) tests. The tests can be run locally (natively or within Docker), but they also run on [Pull Request preview environments](../infra/pull-request-environments.md). This ensures that any new code changes are validated through E2E tests before being merged.
 
+By default, tests are sharded across 3 concurrent runs to reduce total runtime. As the test suite grows, consider increasing the shard count to further optimize execution time. This is set in the [workflow file](../../.github/workflows/e2e-tests.yml#L22).
+
 ## Folder Structure
 In order to support e2e for multiple apps, the folder structure will include a base playwright config (`./e2e/playwright.config.js`), and app-specific derived playwright config that override the base config. See the example folder structure below:
 ```
@@ -54,6 +56,20 @@ Then, run the tests with your app name and base url:
 make e2e-test-native APP_NAME=app BASE_URL=http://localhost:3000
 ```
 
+#### Running tests natively with shards
+
+The following will split the test runs in 3 different shards and create a merged report in the `./e2e/blob-report` . This is meant to mimic how the tests run sharded in CI.
+```
+# ensure app is running on port 3000
+
+make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000 TOTAL_SHARDS=3 CURRENT_SHARD=1 CI=true && \
+make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000 TOTAL_SHARDS=3 CURRENT_SHARD=2 CI=true && \
+make e2e-test APP_NAME=app BASE_URL=http://host.docker.internal:3000 TOTAL_SHARDS=3 CURRENT_SHARD=3 CI=true
+
+make e2e-merge-reports REPORT_PATH=blob-report
+make e2e-show-report
+make e2e-clean-report
+```
 
 ### Viewing the report
 If running in docker, the report will be copied from the container to your local `./e2e/playwright-report` folder. If running natively, the report will also appear in this same folder.
