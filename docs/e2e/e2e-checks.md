@@ -56,7 +56,7 @@ Then, run the tests with your app name and base url:
 make e2e-test-native APP_NAME=app BASE_URL=http://localhost:3000
 ```
 
-#### Running tests natively with shards
+#### Run tests in parallel 
 
 The following commands split test execution into 3 separate shards, with results consolidated into a merged report located in `./e2e/blob-report`. This setup emulates how the sharded tests run in CI.
 ```
