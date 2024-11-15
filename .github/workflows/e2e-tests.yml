@@ -12,75 +12,12 @@ on:
         type: string
 
 jobs:
-  setup:
-    name: Set up dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-            node-version: lts/*
-
-      # Check Node deps from previous workflow runs.
-      # Cache hit as long as package-lock.json file hasn't changed.
-      # Skip e2e-setup-ci step on cache hit.
-      - name: Cache Node.js dependencies
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-            path: e2e/node_modules
-            key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
-            restore-keys: |
-              ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: make e2e-setup-ci
-
-      # Buildx tool allowing for advanced Docker builds, including caching
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image with GitHub Actions cache
-        uses: docker/build-push-action@v5
-        with:
-          # Directory containing all files Docker needs for build
-          context: .
-          # Path to relevant Dockerfile
-          file: ./e2e/Dockerfile
-          # Whether to push to a Docker registry
-          push: false
-          # Tag for the image build
-          tags: playwright-e2e:latest
-          # Where to pull cache layers from - gha means it will pull from Github Actions cache
-          cache-from: type=gha
-          # Where to store build cache after the build is complete
-          # mode max specifies to cache all layers
-          cache-to: type=gha,mode=max
-          # Load the built image from Docker Buildx onto the local Docker daemon
-          load: true
-
-      - name: Save Docker image to tar file
-        run: |
-            docker save playwright-e2e:latest -o /home/runner/work/_temp/playwright-e2e.tar
-
-      - name: Upload Docker image artifact
-        uses: actions/upload-artifact@v4
-        with:
-            name: playwright-e2e
-            path: /home/runner/work/_temp/playwright-e2e.tar
-            retention-days: 1
-
   e2e:
     name: Run E2E tests (${{ matrix.shard }} of ${{ matrix.total_shards }})
     runs-on: ubuntu-latest
-    needs: setup
 
     strategy:
-      fail-fast: false
+      fail-fast: false # Allows e2e test report to be merged if only some of the shards have passed
       matrix:
         shard: [1, 2, 3]
         total_shards: [3] # Github Actions doesn't have a built-in method to get the length of an array
@@ -94,37 +31,13 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v4
-        with:
-          path: e2e/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('e2e/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Download Docker image from setup
-        uses: actions/download-artifact@v4
-        with:
-          name: playwright-e2e
-
-      - name: Move downloaded artifact to expected location
-        run: |
-          mv $(find . -name "playwright-e2e.tar") /home/runner/work/_temp/playwright-e2e.tar
-
-      - name: Load Docker image
-        run: docker load < /home/runner/work/_temp/playwright-e2e.tar
-
       - name: Run e2e tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         run: |
-          docker run --rm \
-            -e APP_NAME=${{ inputs.app_name }} \
-            -e BASE_URL=${{ inputs.service_endpoint }} \
-            -e CURRENT_SHARD=${{ matrix.shard }} \
-            -e TOTAL_SHARDS=${{ matrix.total_shards }} \
-            -e CI=true \
-            -v ${{ github.workspace }}/e2e/playwright-report:/e2e/playwright-report \
-            -v ${{ github.workspace }}/e2e/blob-report:/e2e/blob-report \
-            playwright-e2e:latest
+            make e2e-test \
+                APP_NAME=${{ inputs.app_name }} \
+                BASE_URL=${{ inputs.service_endpoint }} \
+                CURRENT_SHARD=${{ matrix.shard }} \
+                TOTAL_SHARDS=${{ matrix.total_shards }}
 
       - name: Verify blob report directory after tests
         run: |
@@ -140,7 +53,6 @@ jobs:
 
   create-report:
     name: Create merged test report
-    # Merge reports after e2e job, even if some shards have failed
     if: ${{ !cancelled() }}
     needs: e2e
     runs-on: ubuntu-latest
