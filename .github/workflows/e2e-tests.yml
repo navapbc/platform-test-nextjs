@@ -100,6 +100,6 @@ jobs:
       - name: Upload merged HTML report
         uses: actions/upload-artifact@v4
         with:
-            name: merged-html-report
+            name: e2e-test-report
             path: ./e2e/playwright-report
             retention-days: 7
