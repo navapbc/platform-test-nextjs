@@ -5,6 +5,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+        service_endpoint:
+          description: "The service endpoint URL for the E2E tests"
+          required: true
+          type: string
+        app_name:
+          description: "The application name"
+          required: true
+          type: string
 
 jobs:
   call-e2e-tests:
