@@ -1,4 +1,4 @@
-name: E2E Tests on Main
+name: CI app E2E tests on main
 
 on:
   push:
