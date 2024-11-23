@@ -24,8 +24,7 @@ export default defineConfig({
   reporter: process.env.CI
   ? [['blob']]  :
     // Never open the HTML report to prevent terminal from hanging on test failure
-    [['html', { open: 'never' }],
-  ],
+    [['html', { open: 'never' }]],
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions.
   use: {
     // Base URL to use in actions like `await page.goto('/')`.
