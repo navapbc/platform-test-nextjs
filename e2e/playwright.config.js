@@ -23,7 +23,8 @@ export default defineConfig({
   // Use 'blob' for CI to allow merging of reports. See https://playwright.dev/docs/test-reporters
   reporter: process.env.CI
   ? [['blob']]  :
-    // Never open the HTML report to prevent terminal from hanging on test failure
+    // Don't open the HTML report since it hangs when running inside a container.
+    // Use make e2e-show-report for opening the HTML report
     [['html', { open: 'never' }]],
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions.
   use: {
