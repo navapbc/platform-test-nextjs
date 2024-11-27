@@ -36,6 +36,7 @@ __check_defined = \
 	e2e-show-report \
 	e2e-test \
 	e2e-test-native \
+	e2e-test-native-ui \
 	help \
 	infra-check-app-database-roles \
 	infra-check-compliance-checkov \
@@ -119,6 +120,12 @@ e2e-test-native: ## Run end-to-end tests
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	@echo "Running e2e tests with CI=${CI}, APP_NAME=${APP_NAME}, BASE_URL=${BASE_URL}"
 	@cd e2e/$(APP_NAME) && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npx playwright test $(E2E_ARGS)
+
+e2e-test-native-ui: ## Run Playwright UI tests natively
+	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
+	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
+	@echo "Running e2e UI tests natively with APP_NAME=$(APP_NAME), BASE_URL=$(BASE_URL)"
+	@cd e2e && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npm run e2e-test:ui
 
 ###########
 ## Infra ##
