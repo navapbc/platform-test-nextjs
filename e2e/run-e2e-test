@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Script to run Playwright tests with a specified app name.
-# Requires the APP_NAME environment variable to be set.
+# Requires the APP_NAME and BASE_URL environment variables to be set.
 
 # Ensure APP_NAME is provided
 if [[ -z "${APP_NAME}" ]]; then
@@ -9,11 +9,17 @@ if [[ -z "${APP_NAME}" ]]; then
   exit 1
 fi
 
-# Check if the UI flag is set
+# Ensure BASE_URL is provided
+if [[ -z "${BASE_URL}" ]]; then
+  echo "You must pass in a BASE_URL. IE: BASE_URL=http://localhost:3001 npm run e2e-test" >&2
+  exit 1
+fi
+
+# Check if UI is true and run Playwright UI mode
 if [[ "${UI}" == "true" ]]; then
-  echo "Running Playwright tests in UI mode..."
+  echo "Running Playwright UI mode with APP_NAME=${APP_NAME}, BASE_URL=${BASE_URL}"
   npx playwright test --config "${APP_NAME}/playwright.config.js" --ui
 else
-  echo "Running Playwright tests in CLI mode..."
+  echo "Running Playwright tests with APP_NAME=${APP_NAME}, BASE_URL=${BASE_URL}"
   npx playwright test --config "${APP_NAME}/playwright.config.js"
 fi
