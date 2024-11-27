@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v0.12.5-58-g856e8aa
+_commit: v0.12.6-61-g7053f3d
 _src_path: ../template-infra
 app_has_dev_env_setup: true
 app_local_port: 3000
