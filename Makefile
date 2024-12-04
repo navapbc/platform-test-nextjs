@@ -109,7 +109,7 @@ e2e-test: e2e-build
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	docker run --rm\
-		--name playwright-e2e-container \
+		--name $(E2E_IMAGE_NAME)-container \
 		-e APP_NAME=$(APP_NAME) \
 		-e BASE_URL=$(BASE_URL) \
 		-e CURRENT_SHARD=$(CURRENT_SHARD) \
