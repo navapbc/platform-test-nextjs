@@ -75,8 +75,12 @@ __check_defined = \
 ## End-to-end (E2E) Testing ##
 ##############################
 
+# Include project name in image name so that image name
+# does not conflict with other images during local development
+E2E_IMAGE_NAME := $(PROJECT_ROOT)-$(APP_NAME)-e2e
+
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
-	docker build -t playwright-e2e -f ./e2e/Dockerfile .
+	docker build -t $(E2E_IMAGE_NAME) -f ./e2e/Dockerfile .
 
 e2e-clean-report: ## Remove the local e2e folders and their contents
 	rm -rf ./e2e/playwright-report
@@ -85,7 +89,7 @@ e2e-clean-report: ## Remove the local e2e folders and their contents
 	rm -rf ./e2e/example-screenshot.png
 
 e2e-delete-image: ## Delete the Docker image for e2e tests
-	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
+	@docker rmi -f $(E2E_IMAGE_NAME) 2>/dev/null || echo "Docker image $(E2E_IMAGE_NAME) does not exist, skipping."
 
 e2e-merge-reports: ## Merge Playwright blob reports from multiple shards into an HTML report
 	@cd e2e && npm run e2e-merge-reports
@@ -113,7 +117,7 @@ e2e-test: e2e-build
 		-e CI=$(CI) \
 		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
 		-v $(PWD)/e2e/blob-report:/e2e/blob-report \
-		playwright-e2e
+		$(E2E_IMAGE_NAME)
 
 e2e-test-native: ## Run end-to-end tests natively
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
