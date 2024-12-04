@@ -2,7 +2,9 @@
     "name": "e2e",
     "version": "1.0.0",
     "scripts": {
+      "e2e-merge-reports": "npx playwright merge-reports --reporter html blob-report",
       "e2e-setup": "npx playwright install --with-deps",
+      "e2e-show-report": "npx playwright show-report",
       "e2e-test": "./run-e2e-test",
       "e2e-test:ui": "UI=true ./run-e2e-test"
     },

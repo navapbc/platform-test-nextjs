@@ -78,26 +78,27 @@ __check_defined = \
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
 	docker build -t playwright-e2e -f ./e2e/Dockerfile .
 
-e2e-clean-report: ## Remove the local ./e2e/playwright-report and ./e2e/test-results folder and their contents
+e2e-clean-report: ## Remove the local e2e folders and their contents
 	rm -rf ./e2e/playwright-report
 	rm -rf ./e2e/blob-report
 	rm -rf ./e2e/test-results
+	rm -rf ./e2e/example-screenshot.png
 
 e2e-delete-image: ## Delete the Docker image for e2e tests
 	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
 
 e2e-merge-reports: ## Merge Playwright blob reports from multiple shards into an HTML report
-	@cd e2e && npx playwright merge-reports --reporter html blob-report
+	@cd e2e && npm run e2e-merge-reports
 
 e2e-setup-ci: ## Setup end-to-end tests for CI
 	@cd e2e && npm run e2e-setup
 
 e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npm install
-	@cd e2e && npx playwright install --with-deps
+	@cd e2e && npm run e2e-setup
 
 e2e-show-report: ## Show the ./e2e/playwright-report
-	@cd e2e && npx playwright show-report
+	@cd e2e && npm run e2e-show-report
 
 e2e-test: ## Run E2E Playwright tests in a Docker container and copy the report locally
 e2e-test: e2e-build
