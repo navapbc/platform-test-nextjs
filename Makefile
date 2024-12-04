@@ -82,7 +82,7 @@ E2E_IMAGE_NAME := $(PROJECT_ROOT)-$(APP_NAME)-e2e
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
 	docker build -t $(E2E_IMAGE_NAME) -f ./e2e/Dockerfile .
 
-e2e-clean-report: ## Remove the local e2e folders and their contents
+e2e-clean-report: ## Remove the local e2e report folders and content
 	rm -rf ./e2e/playwright-report
 	rm -rf ./e2e/blob-report
 	rm -rf ./e2e/test-results
