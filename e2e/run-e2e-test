@@ -9,17 +9,9 @@ if [[ -z "${APP_NAME}" ]]; then
   exit 1
 fi
 
-# Ensure BASE_URL is provided
+# Warn about optional BASE_URL usage
 if [[ -z "${BASE_URL}" ]]; then
-  echo "You must pass in a BASE_URL. IE: BASE_URL=http://localhost:3001 npm run e2e-test" >&2
-  exit 1
+  echo "Warning: BASE_URL not specified. Using default configuration in playwright.config.js"
 fi
 
-# Check if UI is true and run Playwright UI mode
-if [[ "${UI}" == "true" ]]; then
-  echo "Running Playwright UI mode with APP_NAME=${APP_NAME}, BASE_URL=${BASE_URL}"
-  npx playwright test --config "${APP_NAME}/playwright.config.js" --ui
-else
-  echo "Running Playwright tests with APP_NAME=${APP_NAME}, BASE_URL=${BASE_URL}"
-  npx playwright test --config "${APP_NAME}/playwright.config.js"
-fi
+npx playwright test --config "${APP_NAME}/playwright.config.js" "$@"

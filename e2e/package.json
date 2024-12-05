@@ -6,7 +6,7 @@
       "e2e-setup": "npx playwright install --with-deps",
       "e2e-show-report": "npx playwright show-report",
       "e2e-test": "./run-e2e-test",
-      "e2e-test:ui": "UI=true ./run-e2e-test"
+      "e2e-test:ui": "./run-e2e-test --ui"
     },
     "devDependencies": {
       "@playwright/test": "^1.45.1",
