@@ -76,8 +76,9 @@ __check_defined = \
 ##############################
 
 # Include project name in image name so that image name
-# does not conflict with other images during local development
-E2E_IMAGE_NAME := $(PROJECT_ROOT)-$(APP_NAME)-e2e
+# does not conflict with other images during local development.
+# The e2e test image includes the test suite for all apps and therefore isn't specific to each app.
+E2E_IMAGE_NAME := $(PROJECT_ROOT)-e2e
 
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
 	docker build -t $(E2E_IMAGE_NAME) -f ./e2e/Dockerfile .
@@ -86,23 +87,23 @@ e2e-clean-report: ## Remove the local e2e report folders and content
 	rm -rf ./e2e/playwright-report
 	rm -rf ./e2e/blob-report
 	rm -rf ./e2e/test-results
-	rm -rf ./e2e/example-screenshot.png
+	cd e2e && rm -rf ./e2e/*.{png,jpg,jpeg,gif}
 
 e2e-delete-image: ## Delete the Docker image for e2e tests
-	@docker rmi -f $(E2E_IMAGE_NAME) 2>/dev/null || echo "Docker image $(E2E_IMAGE_NAME) does not exist, skipping."
+	docker rmi -f $(E2E_IMAGE_NAME) 2>/dev/null || echo "Docker image $(E2E_IMAGE_NAME) does not exist, skipping."
 
 e2e-merge-reports: ## Merge E2E blob reports from multiple shards into an HTML report
-	@cd e2e && npm run e2e-merge-reports
+	cd e2e && npm run e2e-merge-reports
 
 e2e-setup-ci: ## Setup end-to-end tests for CI
-	@cd e2e && npm run e2e-setup
+	cd e2e && npm run e2e-setup
 
 e2e-setup-native: ## Setup end-to-end tests
-	@cd e2e && npm install
-	@cd e2e && npm run e2e-setup
+	cd e2e && npm install
+	cd e2e && npm run e2e-setup
 
 e2e-show-report: ## Show the E2E report
-	@cd e2e && npm run e2e-show-report
+	cd e2e && npm run e2e-show-report
 
 e2e-test: ## Run E2E tests in a Docker container and copy the report locally
 e2e-test: e2e-build
@@ -123,13 +124,13 @@ e2e-test-native: ## Run end-to-end tests natively
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	@echo "Running e2e tests with CI=${CI}, APP_NAME=${APP_NAME}, BASE_URL=${BASE_URL}"
-	@cd e2e/$(APP_NAME) && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npm run e2e-test $(E2E_ARGS)
+	cd e2e/$(APP_NAME) && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npm run e2e-test $(E2E_ARGS)
 
 e2e-test-native-ui: ## Run end-to-end tests natively in UI mode
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
 	@:$(call check_defined, BASE_URL, You must pass in a BASE_URL)
 	@echo "Running e2e UI tests natively with APP_NAME=$(APP_NAME), BASE_URL=$(BASE_URL)"
-	@cd e2e && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npm run e2e-test:ui $(E2E_ARGS)
+	cd e2e && APP_NAME=$(APP_NAME) BASE_URL=$(BASE_URL) npm run e2e-test:ui $(E2E_ARGS)
 
 ###########
 ## Infra ##
