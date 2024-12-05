@@ -28,8 +28,9 @@ __check_defined = \
 
 .PHONY : \
 	e2e-build \
+	e2e-clean \
+	e2e-clean-image \
 	e2e-clean-report \
-	e2e-delete-image \
 	e2e-merge-reports \
 	e2e-setup-ci \
 	e2e-setup-native \
@@ -83,14 +84,18 @@ E2E_IMAGE_NAME := $(PROJECT_ROOT)-e2e
 e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dockerfile
 	docker build -t $(E2E_IMAGE_NAME) -f ./e2e/Dockerfile .
 
+e2e-clean: ## Clean both the e2e reports and e2e Docker image
+	$(MAKE) e2e-clean-report
+	$(MAKE) e2e-clean-image
+
+e2e-clean-image: ## Clean the Docker image for e2e tests
+	docker rmi -f $(E2E_IMAGE_NAME) 2>/dev/null || echo "Docker image $(E2E_IMAGE_NAME) does not exist, skipping."
+
 e2e-clean-report: ## Remove the local e2e report folders and content
 	rm -rf ./e2e/playwright-report
 	rm -rf ./e2e/blob-report
 	rm -rf ./e2e/test-results
 	cd e2e && rm -rf ./e2e/*.{png,jpg,jpeg,gif}
-
-e2e-delete-image: ## Delete the Docker image for e2e tests
-	docker rmi -f $(E2E_IMAGE_NAME) 2>/dev/null || echo "Docker image $(E2E_IMAGE_NAME) does not exist, skipping."
 
 e2e-merge-reports: ## Merge E2E blob reports from multiple shards into an HTML report
 	cd e2e && npm run e2e-merge-reports
