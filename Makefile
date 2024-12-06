@@ -119,8 +119,7 @@ e2e-test: e2e-build
 		-e CURRENT_SHARD=$(CURRENT_SHARD) \
 		-e TOTAL_SHARDS=$(TOTAL_SHARDS) \
 		-e CI=$(CI) \
-		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
-		-v $(PWD)/e2e/blob-report:/e2e/blob-report \
+		-v $(PWD)/e2e:/e2e \
 		$(E2E_IMAGE_NAME) \
 		$(E2E_ARGS)
 
