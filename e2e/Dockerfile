@@ -17,4 +17,7 @@ RUN npm run e2e-setup
 # Copy entire e2e folder over
 COPY e2e /e2e
 
-CMD ["npm", "run", "e2e-test"]
+ENTRYPOINT ["npm", "run", "e2e-test", "--"]
+
+# Optional additional args
+CMD [""]
