@@ -121,7 +121,8 @@ e2e-test: e2e-build
 		-e CI=$(CI) \
 		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
 		-v $(PWD)/e2e/blob-report:/e2e/blob-report \
-		$(E2E_IMAGE_NAME)
+		$(E2E_IMAGE_NAME) \
+		$(E2E_ARGS)
 
 e2e-test-native: ## Run end-to-end tests natively
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
