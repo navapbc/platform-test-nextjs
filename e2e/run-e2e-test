@@ -9,9 +9,9 @@ if [[ -z "${APP_NAME}" ]]; then
   exit 1
 fi
 
-# Warn about optional BASE_URL usage
+# Inform about optional BASE_URL usage
 if [[ -z "${BASE_URL}" ]]; then
-  echo "Warning: BASE_URL not specified. Using default configuration in playwright.config.js"
+  echo "BASE_URL not specified. Using default BASE_URL specified in playwright.config.js"
 fi
 
 npx playwright test --config "${APP_NAME}/playwright.config.js" "$@"
