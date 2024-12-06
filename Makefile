@@ -94,7 +94,6 @@ e2e-clean-report: ## Remove the local e2e report folders and content
 	rm -rf ./e2e/playwright-report
 	rm -rf ./e2e/blob-report
 	rm -rf ./e2e/test-results
-	cd e2e && rm -rf ./e2e/*.{png,jpg,jpeg,gif}
 
 e2e-merge-reports: ## Merge E2E blob reports from multiple shards into an HTML report
 	cd e2e && npm run e2e-merge-reports
