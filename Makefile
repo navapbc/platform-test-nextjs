@@ -85,8 +85,7 @@ e2e-build: ## Build the e2e Docker image, if not already built, using ./e2e/Dock
 	docker build -t $(E2E_IMAGE_NAME) -f ./e2e/Dockerfile .
 
 e2e-clean: ## Clean both the e2e reports and e2e Docker image
-	$(MAKE) e2e-clean-report
-	$(MAKE) e2e-clean-image
+e2e-clean: e2e-clean-report e2e-clean-image
 
 e2e-clean-image: ## Clean the Docker image for e2e tests
 	docker rmi -f $(E2E_IMAGE_NAME) 2>/dev/null || echo "Docker image $(E2E_IMAGE_NAME) does not exist, skipping."
