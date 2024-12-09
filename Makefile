@@ -86,15 +86,7 @@ e2e-delete-image: ## Delete the Docker image for e2e tests
 	@docker rmi -f playwright-e2e 2>/dev/null || echo "Docker image playwright-e2e does not exist, skipping."
 
 e2e-merge-reports: ## Merge Playwright blob reports from multiple shards into an HTML report
-	@if [ ! -d "./e2e/blob-report" ]; then \
-		echo "❗The blob-report folder does not exist. Cannot merge reports."; \
-		exit 1; \
-	elif [ -z "$(wildcard ./e2e/blob-report/*)" ]; then \
-		echo "❗The blob-report folder is empty. Cannot merge reports."; \
-		exit 1; \
-	else \
-		cd e2e && npx playwright merge-reports --reporter html blob-report; \
-	fi
+	@cd e2e && npx playwright merge-reports --reporter html blob-report
 
 e2e-setup-ci: ## Setup end-to-end tests for CI
 	@cd e2e && npm ci
@@ -105,15 +97,7 @@ e2e-setup-native: ## Setup end-to-end tests
 	@cd e2e && npx playwright install --with-deps
 
 e2e-show-report: ## Show the ./e2e/playwright-report
-	@if [ ! -d "./e2e/playwright-report" ]; then \
-		echo "❗ Error: The playwright-report folder does not exist. Cannot display reports."; \
-		exit 1; \
-	elif [ -z "$(wildcard ./e2e/playwright-report/*)" ]; then \
-		echo "❗ Error: The playwright-report folder is empty. Cannot display reports."; \
-		exit 1; \
-	else \
-		cd e2e && npx playwright show-report; \
-	fi
+	@cd e2e && npx playwright show-report
 
 e2e-test: ## Run E2E Playwright tests in a Docker container and copy the report locally
 e2e-test: e2e-build
@@ -128,9 +112,7 @@ e2e-test: e2e-build
 		-e CI=$(CI) \
 		-v $(PWD)/e2e/playwright-report:/e2e/playwright-report \
 		-v $(PWD)/e2e/blob-report:/e2e/blob-report \
-		playwright-e2e | grep -v "To open last HTML report run" | grep -v "npx playwright show-report"
-	@echo "📄 HTML report generated!"
-	@echo "🔍 View it with: make e2e-show-report"
+		playwright-e2e
 
 e2e-test-native: ## Run end-to-end tests
 	@:$(call check_defined, APP_NAME, You must pass in a specific APP_NAME)
