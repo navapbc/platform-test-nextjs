@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v0.14.2-83-g73405d2
+_commit: v0.14.2-85-g0a90604
 _src_path: ../template-infra
 base_code_repository_url: git@github.com:navapbc/platform-test-nextjs.git
 base_default_region: us-east-1
