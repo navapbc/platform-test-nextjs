@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: 2024-04-18-45-g042cf0a
+_commit: 2fd54c5
 _src_path: https://github.com/navapbc/template-application-nextjs
 app_enable_storybook_cd: true
 app_local_port: 3000
