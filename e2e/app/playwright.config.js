@@ -6,7 +6,6 @@ export default defineConfig(
   deepMerge(baseConfig, {
     use: {
       baseURL: baseConfig.use.baseURL || 'localhost:3000',
-      // emailServiceType: "Mailinator", // Options: ["MessageChecker", "Mailinator"]. Default: "MessageChecker"
     },
   })
 );
