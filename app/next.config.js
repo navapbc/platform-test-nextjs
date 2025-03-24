@@ -1,4 +1,6 @@
 // @ts-check
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
 const withNextIntl = require("next-intl/plugin")("./src/i18n/server.ts");
 const sassOptions = require("./scripts/sassOptions");
 
@@ -27,4 +29,4 @@ const nextConfig = {
   ],
 };
 
-module.exports = withNextIntl(nextConfig);
+export default withNextIntl(nextConfig);
