@@ -1,8 +1,7 @@
 // @ts-check
-import { createRequire } from "node:module";
-const require = createRequire(import.meta.url);
-const withNextIntl = require("next-intl/plugin")("./src/i18n/server.ts");
-const sassOptions = require("./scripts/sassOptions");
+import sassOptions from "./scripts/sassOptions.js";
+import withNextIntl from "next-intl/plugin";
+const intlPlugin = withNextIntl("./src/i18n/server.ts");
 
 /**
  * Configure the base path for the app. Useful if you're deploying to a subdirectory (like GitHub Pages).
@@ -29,4 +28,4 @@ const nextConfig = {
   ],
 };
 
-export default withNextIntl(nextConfig);
+export default intlPlugin(nextConfig);
