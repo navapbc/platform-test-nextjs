@@ -4,12 +4,8 @@
  * This runs after `npm install`
  */
 // @ts-check
-import fs from "fs";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const fs = require("fs");
+const path = require("path");
 
 const uswdsPath = path.resolve(__dirname, "../node_modules/@uswds/uswds/dist");
 const publicPath = path.resolve(__dirname, "../public/uswds");

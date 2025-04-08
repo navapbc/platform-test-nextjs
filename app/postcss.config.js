@@ -3,7 +3,7 @@
  * does out of the box.
  * https://github.com/storybookjs/storybook/issues/23234
  */
-export default {
+module.exports = {
   plugins: {
     autoprefixer: {},
   },

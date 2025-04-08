@@ -1,5 +1,5 @@
 // @ts-check
-import * as sass from "sass";
+const sass = require("sass");
 
 /**
  * Configure Sass to load USWDS assets, and expose a Sass function for setting the
@@ -19,4 +19,4 @@ function sassOptions(basePath = "") {
   };
 }
 
-export default sassOptions;
+module.exports = sassOptions;
