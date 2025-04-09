@@ -5,11 +5,7 @@
  */
 // @ts-check
 
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import path from "path";
 
 // Support deploying to a subdirectory, such as GitHub Pages.
 const NEXT_PUBLIC_BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -30,7 +26,7 @@ const config = {
     // https://storybook.js.org/docs/get-started/nextjs
     name: "@storybook/nextjs",
     options: {
-      nextConfigPath: path.resolve(__dirname, "../next.config.js"),
+      nextConfigPath: path.resolve(import.meta.dirname, "../next.config.js"),
       builder: {
         // lazyCompilation breaks Storybook when running from within Docker
         // Google Translate this page for context: https://zenn.dev/yutaosawa/scraps/7764e5f17173d1
