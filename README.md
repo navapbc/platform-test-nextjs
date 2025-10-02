@@ -1,6 +1,12 @@
 # platform-test-nextjs
 
-This project is used to test the integration of [template-infra](https://github.com/navapbc/template-infra) and [template-application-nextjs](https://github.com/navapbc/template-application-nextjs).
+> **⚠️ This repository is archived.**
+>
+> The Next.js application has been migrated to the [platform-test](https://github.com/navapbc/platform-test) repository as `app-nextjs`. All future development and updates will occur in that repository.
+>
+> This consolidation allows us to test multiple applications within a single infrastructure setup, better reflecting real-world platform usage.
+
+This project was used to test the integration of [template-infra](https://github.com/navapbc/template-infra) and [template-application-nextjs](https://github.com/navapbc/template-application-nextjs).
 
 ## Environment URLs
 
